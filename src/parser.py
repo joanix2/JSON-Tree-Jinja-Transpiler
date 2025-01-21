@@ -1,56 +1,44 @@
 import os
 import xml.etree.ElementTree as ET
+from xml.dom.minidom import parseString
+from xml.etree.ElementTree import Element, SubElement, tostring
 from src.jinja.template_services import compile_template
 
-# Default output directory
-OUTPUT_DIR = "output"
+# Default output file
+OUTPUT_XML_FILE = os.path.join("output","consolidated_output.xml")
 
 # Ensure the output directory exists
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(os.path.dirname(OUTPUT_XML_FILE), exist_ok=True)
 
-def rec_xml_parser(xml_tree, output_dir=OUTPUT_DIR):
+def rec_xml_parser(xml_node):
     """
-    Recursive function to parse an XML tree and generate files based on templates.
-
-    :param xml_tree: The root of the XML tree to parse.
-    :param output_dir: The directory where the generated files will be saved.
+    Retourne le rendu Jinja du noeud courant et de ses enfants, en remontant
+    une chaîne de caractères qui finira par constituer l'intégralité du code HTML.
     """
-    # Ensure the output directory exists
-    os.makedirs(output_dir, exist_ok=True)
+    # 1) Rendre récursivement tous les enfants
+    children_renders = []
+    for child in xml_node:
+        child_render = rec_xml_parser(child)
+        children_renders.append(child_render)
 
-    for child in xml_tree:
-        # Get tag name and attributes
-        tag = child.tag
-        attributes = child.attrib
+    # 2) Concaténation des arguments
+    context = {
+        **xml_node.attrib,
+        "children": children_renders
+    }
 
-        # Extract the template name and output file name from the attributes
-        template_name = f"{tag}.jinja"
-        output_file = f"{tag}.txt"
+    # 3) Compiler le template du noeud courant
+    template_name = f"{xml_node.tag}.jinja"
+    rendered_content = compile_template(template_name, context)
 
-        if template_name and output_file:
-            # Compile the template with the current attributes
-            try:
-                rendered_content = compile_template(template_name, attributes)
+    return rendered_content
 
-                # Write the rendered content to the specified output file
-                output_path = os.path.join(output_dir, output_file)
-                with open(output_path, "w") as output_f:
-                    output_f.write(rendered_content)
-
-                print(f"Generated file: {output_path}")
-
-            except Exception as e:
-                print(f"Error processing template '{template_name}' for file '{output_file}': {e}")
-
-        # Recursively process child elements
-        rec_xml_parser(child, output_dir)
-
-def parse_xml_file(xml_file_path, output_dir=OUTPUT_DIR):
+def parse_xml_file(xml_file_path, output_file=OUTPUT_XML_FILE):
     """
-    Parse an XML file and generate files based on the templates specified in the XML.
+    Parse an XML file and consolidate all rendered content into a single XML file.
 
     :param xml_file_path: Path to the XML file to parse.
-    :param output_dir: The directory where the generated files will be saved.
+    :param output_file: Path to the consolidated output XML file.
     """
     try:
         # Load and parse the XML file
@@ -58,7 +46,12 @@ def parse_xml_file(xml_file_path, output_dir=OUTPUT_DIR):
         root = tree.getroot()
 
         # Start the recursive parsing process
-        rec_xml_parser(root, output_dir)
+        xml_render = rec_xml_parser(root)
+
+        with open(output_file, "w") as f:
+            f.write(xml_render)
+
+        print(f"Consolidated XML file generated at: {output_file}")
 
     except ET.ParseError as e:
         print(f"Error parsing XML file '{xml_file_path}': {e}")

@@ -49,7 +49,7 @@ def compile_template(template_name: str, args: dict) -> str:
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Template file '{template_name}' does not exist.")
     
-    with open(file_path, 'r') as template_file:
+    with open(file_path, 'r', encoding='utf-8') as template_file:
         template_content = template_file.read()
     
     template = Template(template_content)

@@ -1,6 +1,9 @@
+import os
 import click
 from src.parser import parse_xml_file
 from src.build import build_infrastructure
+
+INFRASTRUCTURE = os.path.join("output","infrastructure.xml")
 
 @click.group()
 def cli():
@@ -11,7 +14,7 @@ def cli():
 
 @cli.command()
 @click.argument("input_file", type=click.Path(exists=True), default="main.xml")
-@click.option("--output-dir", "-o", type=click.Path(), default="output", help="Répertoire de sortie pour les fichiers générés.")
+@click.option("--output-dir", "-o", type=click.Path(), default=INFRASTRUCTURE, help="Répertoire de sortie pour les fichiers générés.")
 def compile(input_file, output_dir):
     """
     Traite un fichier XML et génère des fichiers à partir de templates.
@@ -33,7 +36,7 @@ def compile(input_file, output_dir):
         click.echo(f"An error occurred: {e}", err=True)
 
 @cli.command()
-@click.option("--config-file", "-c", type=click.Path(exists=True), default="infrastructure.xml", help="Fichier XML décrivant l'arborescence.")
+@click.option("--config-file", "-c", type=click.Path(exists=True), default=INFRASTRUCTURE, help="Fichier XML décrivant l'arborescence.")
 def build(config_file):
     """
     Génère une arborescence de projet à partir d'un fichier XML.
