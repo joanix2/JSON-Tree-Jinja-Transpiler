@@ -1,12 +1,20 @@
 import click
 from src.parser import parse_xml_file
+from src.build import build_infrastructure
 
-@click.command()
+@click.group()
+def cli():
+    """
+    CLI pour la gestion des templates et des projets.
+    """
+    pass
+
+@cli.command()
 @click.argument("input_file", type=click.Path(exists=True), default="main.xml")
 @click.option("--output-dir", "-o", type=click.Path(), default="output", help="Répertoire de sortie pour les fichiers générés.")
-def cli(input_file, output_dir):
+def compile(input_file, output_dir):
     """
-    CLI pour traiter un fichier XML et générer des fichiers à partir de templates.
+    Traite un fichier XML et génère des fichiers à partir de templates.
 
     Arguments :
         INPUT_FILE : Le fichier XML à traiter (par défaut : main.xml).
@@ -23,6 +31,19 @@ def cli(input_file, output_dir):
         click.echo("Processing completed successfully.")
     except Exception as e:
         click.echo(f"An error occurred: {e}", err=True)
+
+@cli.command()
+@click.option("--config-file", "-c", type=click.Path(exists=True), default="infrastructure.yml", help="Fichier YAML décrivant l'arborescence.")
+def build(config_file):
+    """
+    Génère une arborescence de projet à partir d'un fichier YAML.
+
+    Options :
+        --config-file, -c : Fichier YAML décrivant la structure du projet (par défaut : 'infrastructure.yml').
+    """
+    click.echo(f"Loading configuration from: {config_file}")
+    build_infrastructure(config_file)
+
 
 if __name__ == "__main__":
     cli()

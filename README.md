@@ -2,24 +2,45 @@
 
 Ce projet est un générateur de DSL qui convertit du code XML grâce à des templates Jinja. L'objectif est d'auto-générer les DSL, de créer des tests associés et d'adopter une philosophie de développement orientée tests (Test Driven Development), où ChatGPT aide à corriger les erreurs.
 
-### Exemple d’utilisation dans le terminal :
+## Commandes disponibles
 
-1. Traiter un fichier XML avec les valeurs par défaut :
+1. **`compile`**  
+   Traite un fichier XML et génère des fichiers à partir de templates.
 
-   ```bash
-   python cli.py
-   ```
+   **Exemples d’utilisation :**
 
-2. Spécifier un fichier XML d’entrée :
+   - Traiter un fichier XML avec les valeurs par défaut (fichier `main.xml` dans le répertoire courant) et générer les fichiers dans `output/` :
 
-   ```bash
-   python cli.py custom_file.xml
-   ```
+     ```bash
+     python cli.py compile
+     ```
 
-3. Spécifier un fichier XML d’entrée et un répertoire de sortie personnalisé :
-   ```bash
-   python cli.py custom_file.xml --output-dir custom_output
-   ```
+   - Spécifier un fichier XML d’entrée personnalisé :
+
+     ```bash
+     python cli.py compile custom_file.xml
+     ```
+
+   - Spécifier un fichier XML d’entrée et un répertoire de sortie personnalisé :
+     ```bash
+     python cli.py compile custom_file.xml --output-dir custom_output
+     ```
+
+2. **`build`**  
+   Génère une arborescence de projet à partir d’un fichier de configuration YAML.
+
+   **Exemples d’utilisation :**
+
+   - Générer une arborescence en utilisant le fichier YAML par défaut (`infrastructure.yml`) :
+
+     ```bash
+     python cli.py build
+     ```
+
+   - Spécifier un fichier YAML de configuration différent :
+     ```bash
+     python cli.py build --config-file custom_config.yml
+     ```
 
 ### Bonnes pratiques :
 
