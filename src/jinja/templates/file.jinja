@@ -1,0 +1,8 @@
+- name: index.html
+  type: file
+  {% if children %}
+  children:
+  {% for child in children %}
+{{ child | indent(4, true) }}
+  {% endfor %}
+  {% endif %}

@@ -1,5 +1,5 @@
-<form>
+  <form>
   {% for child in children %}
-    {{ child }}
+  {{ child | indent(4, true) }}
   {% endfor %}
-</form>
+  </form>
