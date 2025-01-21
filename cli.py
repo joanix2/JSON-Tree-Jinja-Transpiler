@@ -36,13 +36,13 @@ def compile(input_file, output_dir):
         click.echo(f"An error occurred: {e}", err=True)
 
 @cli.command()
-@click.option("--config-file", "-c", type=click.Path(exists=True), default=INFRASTRUCTURE, help="Fichier XML décrivant l'arborescence.")
+@click.option("--config-file", "-c", type=click.Path(exists=True), default=INFRASTRUCTURE, help="Fichier YAML décrivant l'arborescence.")
 def build(config_file):
     """
-    Génère une arborescence de projet à partir d'un fichier XML.
+    Génère une arborescence de projet à partir d'un fichier YAML.
 
     Options :
-        --config-file, -c : Fichier XML décrivant la structure du projet (par défaut : 'infrastructure.xml').
+        --config-file, -c : Fichier YAML décrivant la structure du projet (par défaut : 'infrastructure.yml').
     """
     click.echo(f"Loading configuration from: {config_file}")
     build_infrastructure(config_file)
