@@ -1,5 +1,5 @@
 import click
-from parser import parse_xml_file
+from src.parser import parse_xml_file
 
 @click.command()
 @click.argument("input_file", type=click.Path(exists=True), default="main.xml")

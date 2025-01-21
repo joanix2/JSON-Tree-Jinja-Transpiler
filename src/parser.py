@@ -1,6 +1,6 @@
 import os
 import xml.etree.ElementTree as ET
-from template import compile_template
+from src.jinja.template_service import compile_template
 
 # Default output directory
 OUTPUT_DIR = "output"
