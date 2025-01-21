@@ -1,6 +1,6 @@
 import os
 import xml.etree.ElementTree as ET
-from src.jinja.template_service import compile_template
+from src.jinja.template_services import compile_template
 
 # Default output directory
 OUTPUT_DIR = "output"
@@ -24,8 +24,8 @@ def rec_xml_parser(xml_tree, output_dir=OUTPUT_DIR):
         attributes = child.attrib
 
         # Extract the template name and output file name from the attributes
-        template_name = attributes.get("template")
-        output_file = attributes.get("output")
+        template_name = f"{tag}.jinja"
+        output_file = f"{tag}.txt"
 
         if template_name and output_file:
             # Compile the template with the current attributes

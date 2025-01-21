@@ -1,0 +1,4 @@
+<div>
+    <label for="{{ name|lower }}">{{ name }}</label>
+    <input type="text" id="{{ name|lower }}" name="{{ name|lower }}" placeholder="{{ placeholder }}" {% if required == "true" %}required{% endif %} />
+</div>

@@ -1,0 +1,4 @@
+<form>
+    <text-field name="Name" placeholder="Enter your name" required="true" />
+    <number-field name="Age" min="18" max="100" required="true" />
+</form>

@@ -2,7 +2,7 @@ import os
 from jinja2 import Template
 
 # Directory for templates
-TEMPLATE_DIR = "templates"
+TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "templates")
 
 # Ensure the templates directory exists
 os.makedirs(TEMPLATE_DIR, exist_ok=True)
