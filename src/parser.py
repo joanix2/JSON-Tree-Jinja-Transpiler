@@ -1,8 +1,7 @@
 import os
 import xml.etree.ElementTree as ET
-from xml.dom.minidom import parseString
-from xml.etree.ElementTree import Element, SubElement, tostring
-from src.jinja.template_services import compile_template
+from src.node import Node
+from src.jinja.template_services import get_template
 
 # Default output file
 OUTPUT_XML_FILE = os.path.join("output","consolidated_output.xml")
@@ -12,26 +11,21 @@ os.makedirs(os.path.dirname(OUTPUT_XML_FILE), exist_ok=True)
 
 def rec_xml_parser(xml_node):
     """
-    Retourne le rendu Jinja du noeud courant et de ses enfants, en remontant
-    une chaîne de caractères qui finira par constituer l'intégralité du code HTML.
+    Recursively parses an XML node and its children, returning a Node object
+    that renders itself and its children.
+
+    :param xml_node: The current XML element.
+    :return: A Node object representing the current XML element and its children.
     """
-    # 1) Rendre récursivement tous les enfants
-    children_renders = []
+    children = []
     for child in xml_node:
-        child_render = rec_xml_parser(child)
-        children_renders.append(child_render)
+        child_node = rec_xml_parser(child)
+        children.append(child_node)
 
-    # 2) Concaténation des arguments
-    context = {
-        **xml_node.attrib,
-        "children": children_renders
-    }
-
-    # 3) Compiler le template du noeud courant
     template_name = f"{xml_node.tag}.jinja"
-    rendered_content = compile_template(template_name, context)
+    template = get_template(template_name)
 
-    return rendered_content
+    return Node(tag=xml_node.tag, template=template, children=children, **xml_node.attrib)
 
 def parse_xml_file(xml_file_path, output_file=OUTPUT_XML_FILE):
     """
@@ -40,20 +34,20 @@ def parse_xml_file(xml_file_path, output_file=OUTPUT_XML_FILE):
     :param xml_file_path: Path to the XML file to parse.
     :param output_file: Path to the consolidated output XML file.
     """
-    try:
-        # Load and parse the XML file
-        tree = ET.parse(xml_file_path)
-        root = tree.getroot()
+    # Load and parse the XML file
+    tree = ET.parse(xml_file_path)
+    root = tree.getroot()
 
-        # Start the recursive parsing process
-        xml_render = rec_xml_parser(root)
+    # Start the recursive parsing process
+    root_node = rec_xml_parser(root)
+    print(root_node)
 
-        with open(output_file, "w") as f:
-            f.write(xml_render)
+    # Render the entire tree starting from the root node
+    rendered_content = root_node.compile()
 
-        print(f"Consolidated XML file generated at: {output_file}")
+    # Write the rendered content to the output file
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write(rendered_content)
 
-    except ET.ParseError as e:
-        print(f"Error parsing XML file '{xml_file_path}': {e}")
-    except Exception as e:
-        print(f"Error processing XML file '{xml_file_path}': {e}")
+    print(f"Consolidated XML file generated at: {output_file}")

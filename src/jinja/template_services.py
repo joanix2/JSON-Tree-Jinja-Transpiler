@@ -44,7 +44,12 @@ def compile_template(template_name: str, args: dict) -> str:
     :param template_name: Name of the template file to compile.
     :param args: Dictionary of arguments to render in the template.
     :return: Rendered template content as a string.
-    """
+    """   
+    template = get_template(template_name)
+    rendered_content = template.render(args)
+    return rendered_content
+
+def get_template(template_name: str) -> Template:
     file_path = os.path.join(TEMPLATE_DIR, template_name)
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Template file '{template_name}' does not exist.")
@@ -52,6 +57,4 @@ def compile_template(template_name: str, args: dict) -> str:
     with open(file_path, 'r', encoding='utf-8') as template_file:
         template_content = template_file.read()
     
-    template = Template(template_content)
-    rendered_content = template.render(args)
-    return rendered_content
+    return Template(template_content)

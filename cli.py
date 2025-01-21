@@ -28,12 +28,8 @@ def compile(input_file, output_dir):
     click.echo(f"Processing XML file: {input_file}")
     click.echo(f"Output directory: {output_dir}")
 
-    try:
-        # Appelle la fonction pour traiter le fichier XML
-        parse_xml_file(input_file, output_dir)
-        click.echo("Processing completed successfully.")
-    except Exception as e:
-        click.echo(f"An error occurred: {e}", err=True)
+    # Appelle la fonction pour traiter le fichier XML
+    parse_xml_file(input_file, output_dir)
 
 @cli.command()
 @click.option("--config-file", "-c", type=click.Path(exists=True), default=INFRASTRUCTURE, help="Fichier YAML décrivant l'arborescence.")

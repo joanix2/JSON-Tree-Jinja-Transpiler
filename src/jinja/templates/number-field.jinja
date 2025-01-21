@@ -1,5 +1,7 @@
+{% if output_type == "html" %}
 <div>
     <label for="{{ name|lower }}">{{ name }}</label>
     <input type="number" id="{{ name|lower }}" name="{{ name|lower }}" min="{{ min }}" max="{{ max }}" {% if required == "true" %}required{% endif %} />
     <small>Value must be between {{ min }} and {{ max }}</small>
 </div>
+{% endif %}

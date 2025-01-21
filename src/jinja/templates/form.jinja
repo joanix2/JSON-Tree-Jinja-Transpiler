@@ -1,5 +1,11 @@
-  <form>
-  {% for child in children %}
-  {{ child | indent(4, true) }}
-  {% endfor %}
-  </form>
+<style>
+{% for child in children %}
+{{ child.compile("css") | indent(4, true) }}
+{% endfor %}
+</style>
+
+<form>
+{% for child in children %}
+{{ child.compile("html") | indent(4, true) }}
+{% endfor %}
+</form>

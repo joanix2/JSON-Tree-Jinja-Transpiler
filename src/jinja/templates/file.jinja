@@ -1,8 +1,8 @@
 - name: index.html
   type: file
   {% if children %}
-  children:
+  content: |
   {% for child in children %}
-{{ child | indent(4, true) }}
+{{ child.compile() | indent(4, true) }}
   {% endfor %}
   {% endif %}
