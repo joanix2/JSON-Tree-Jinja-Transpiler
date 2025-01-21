@@ -3,7 +3,7 @@ import click
 from src.parser import parse_xml_file
 from src.build import build_infrastructure
 
-INFRASTRUCTURE = os.path.join("output","infrastructure.xml")
+INFRASTRUCTURE = os.path.join("output","infrastructure.yml")
 
 @click.group()
 def cli():

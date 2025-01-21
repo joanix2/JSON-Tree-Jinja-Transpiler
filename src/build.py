@@ -38,7 +38,7 @@ def build_infrastructure(config_file):
         structure = config['structure']
 
         # Chemin de base
-        base_path = os.path.join(output_dir, project_name)
+        base_path = os.path.join(os.path.dirname(config_file), output_dir, project_name)
 
         # Créer la structure de l'arborescence
         os.makedirs(base_path, exist_ok=True)
