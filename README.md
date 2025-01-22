@@ -42,6 +42,25 @@ Ce projet est un générateur de DSL qui convertit du code XML grâce à des tem
      python cli.py build --config-file custom_config.yml
      ```
 
+3. **`generate tests`**
+   **Générer des tests avec les valeurs par défaut :**
+
+   ```bash
+   python cli.py generate-tests
+   ```
+
+   **Spécifier un fichier XML d’entrée et un répertoire de sortie personnalisé :**
+
+   ```bash
+   python cli.py generate-tests custom_file.xml --output-dir custom_tests
+   ```
+
+   **Lister les commandes disponibles :**
+
+   ```bash
+   python cli.py --help
+   ```
+
 ### Bonnes pratiques :
 
 1. **Utiliser un environnement virtuel** :

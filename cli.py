@@ -3,8 +3,13 @@ import click
 from src.parser import parse_xml_file
 from src.build import build_infrastructure
 import xml.etree.ElementTree as ET
+from src.tests_gen.xml_tree import process_xml_file
 
 INFRASTRUCTURE = os.path.join("output","infrastructure.yml")
+TEST_OUTPUT_DIR = os.path.join("output", "tests")
+
+# Ensure the output directory exists
+os.makedirs(TEST_OUTPUT_DIR, exist_ok=True)
 
 @click.group()
 def cli():
@@ -48,6 +53,25 @@ def build(config_file):
     click.echo(f"Loading configuration from: {config_file}")
     build_infrastructure(config_file)
 
+@cli.command()
+@click.argument("input_file", type=click.Path(exists=True), default="main.xml")
+@click.option("--output-dir", "-o", type=click.Path(), default=TEST_OUTPUT_DIR, help="Répertoire de sortie pour les tests générés.")
+def generate_tests(input_file, output_dir):
+    """
+    Génère automatiquement des tests à partir d'un fichier XML.
+
+    Arguments :
+        INPUT_FILE : Le fichier XML à traiter (par défaut : main.xml).
+
+    Options :
+        --output-dir, -o : Répertoire de sortie pour les fichiers générés (par défaut : 'output/tests').
+    """
+    click.echo(f"Generating tests from XML file: {input_file}")
+    click.echo(f"Tests will be saved in: {output_dir}")
+
+    # Appelle la fonction pour traiter le fichier XML et générer des fichiers de test
+    process_xml_file(input_file, output_dir)
+    click.echo("Test generation completed.")
 
 if __name__ == "__main__":
     cli()
