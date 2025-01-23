@@ -1,12 +1,16 @@
-from flask import Flask, request, jsonify
 import os
-from src.parser import parse_xml_file
-from src.build import build_infrastructure
 import hashlib
 import xml.etree.ElementTree as ET
+
+from flask import Flask, request, jsonify
 from flask_jwt_extended import (
     JWTManager, create_access_token, jwt_required, get_jwt_identity
 )
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from src.parser import parse_xml_file
+from src.build import build_infrastructure
+from src.mongo import connect_to_mongo, get_or_create_collection
 
 app = Flask(__name__)
 
@@ -18,11 +22,33 @@ jwt = JWTManager(app)
 BASE_OUTPUT_DIR = os.path.join("output")
 os.makedirs(BASE_OUTPUT_DIR, exist_ok=True)
 
-# Utilisateurs fictifs pour l'authentification
-USERS = {
-    "admin": "password123",
-    "user": "userpassword"
-}
+# Connexion à la base MongoDB
+DATABASE_NAME = "authdb"
+COLLECTION_NAME = "users"
+client = connect_to_mongo()
+users_collection = get_or_create_collection(client, DATABASE_NAME, COLLECTION_NAME)
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    """
+    Endpoint pour créer un nouvel utilisateur.
+    """
+    data = request.get_json(force=True)
+    username = data.get("username")
+    password = data.get("password")
+
+    # Vérifier si l'utilisateur existe déjà
+    if users_collection.find_one({"username": username}):
+        return jsonify({"error": "Nom d'utilisateur déjà pris"}), 400
+
+    # Hacher le mot de passe avant de le stocker
+    hashed_password = generate_password_hash(password)
+
+    # Insérer l'utilisateur dans la base de données
+    user = {"username": username, "password": hashed_password}
+    users_collection.insert_one(user)
+
+    return jsonify({"message": "Utilisateur créé avec succès"}), 201
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -33,13 +59,18 @@ def login():
     username = data.get("username")
     password = data.get("password")
 
-    # Vérification des identifiants
-    if username in USERS and USERS[username] == password:
-        # Crée un token JWT pour l'utilisateur
-        access_token = create_access_token(identity=username)
-        return jsonify(access_token=access_token), 200
+    # Vérifier si l'utilisateur existe
+    user = users_collection.find_one({"username": username})
+    if not user:
+        return jsonify({"error": "Nom d'utilisateur ou mot de passe incorrect"}), 401
 
-    return jsonify({"error": "Nom d'utilisateur ou mot de passe incorrect"}), 401
+    # Vérifier le mot de passe
+    if not check_password_hash(user["password"], password):
+        return jsonify({"error": "Nom d'utilisateur ou mot de passe incorrect"}), 401
+
+    # Créer un token JWT
+    access_token = create_access_token(identity=username)
+    return jsonify(access_token=access_token), 200
 
 @app.route('/compile', methods=['POST'])
 @jwt_required()
