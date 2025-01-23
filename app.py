@@ -55,7 +55,10 @@ def build_endpoint():
         - config_file (str) : chemin vers le fichier YAML décrivant la structure du projet 
                              (par défaut : output/infrastructure.yml)
     """
-    config_file = INFRASTRUCTURE
+
+    data = request.get_json(force=True)
+    id = data.get('id')
+    config_file = os.path.join(BASE_OUTPUT_DIR, id, "infrastructure.yml")
 
     try:
         # Appelle la fonction pour construire l'infrastructure
