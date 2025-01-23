@@ -27,19 +27,16 @@ def rec_xml_parser(xml_node):
 
     return Node(tag=xml_node.tag, template=template, children=children, **xml_node.attrib)
 
-def parse_xml_file(xml_file_path, output_file=OUTPUT_XML_FILE):
+def parse_xml_file(xml_tree_root: ET.Element, output_file=OUTPUT_XML_FILE):
     """
     Parse an XML file and consolidate all rendered content into a single XML file.
 
     :param xml_file_path: Path to the XML file to parse.
     :param output_file: Path to the consolidated output XML file.
     """
-    # Load and parse the XML file
-    tree = ET.parse(xml_file_path)
-    root = tree.getroot()
 
     # Start the recursive parsing process
-    root_node = rec_xml_parser(root)
+    root_node = rec_xml_parser(xml_tree_root)
     print(root_node)
 
     # Render the entire tree starting from the root node

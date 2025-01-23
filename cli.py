@@ -2,6 +2,7 @@ import os
 import click
 from src.parser import parse_xml_file
 from src.build import build_infrastructure
+import xml.etree.ElementTree as ET
 
 INFRASTRUCTURE = os.path.join("output","infrastructure.yml")
 
@@ -28,8 +29,12 @@ def compile(input_file, output_dir):
     click.echo(f"Processing XML file: {input_file}")
     click.echo(f"Output directory: {output_dir}")
 
+    # Load and parse the XML file
+    tree = ET.parse(input_file)
+    root = tree.getroot()
+
     # Appelle la fonction pour traiter le fichier XML
-    parse_xml_file(input_file, output_dir)
+    parse_xml_file(root, output_dir)
 
 @cli.command()
 @click.option("--config-file", "-c", type=click.Path(exists=True), default=INFRASTRUCTURE, help="Fichier YAML décrivant l'arborescence.")
