@@ -1,0 +1,25 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches:
+      - main # Déclenche le build sur la branche "main"
+  pull_request:
+    branches:
+      - main # Déclenche le build sur les PR vers "main"
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker Image
+        run: |
+          docker build . -t flask-app:latest
