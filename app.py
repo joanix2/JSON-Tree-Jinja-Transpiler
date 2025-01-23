@@ -4,20 +4,56 @@ from src.parser import parse_xml_file
 from src.build import build_infrastructure
 import hashlib
 import xml.etree.ElementTree as ET
+from flask_jwt_extended import (
+    JWTManager, create_access_token, jwt_required, get_jwt_identity
+)
 
 app = Flask(__name__)
+
+# Configuration de la clé secrète pour JWT
+app.config["JWT_SECRET_KEY"] = "votre_cle_secrete_pour_jwt"  # Changez cette clé pour quelque chose de sécurisé
+jwt = JWTManager(app)
 
 # Chemin par défaut pour l'infrastructure
 BASE_OUTPUT_DIR = os.path.join("output")
 os.makedirs(BASE_OUTPUT_DIR, exist_ok=True)
 
+# Utilisateurs fictifs pour l'authentification
+USERS = {
+    "admin": "password123",
+    "user": "userpassword"
+}
+
+@app.route('/login', methods=['POST'])
+def login():
+    """
+    Endpoint pour s'authentifier et obtenir un token JWT.
+    """
+    data = request.get_json(force=True)
+    username = data.get("username")
+    password = data.get("password")
+
+    # Vérification des identifiants
+    if username in USERS and USERS[username] == password:
+        # Crée un token JWT pour l'utilisateur
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token), 200
+
+    return jsonify({"error": "Nom d'utilisateur ou mot de passe incorrect"}), 401
+
 @app.route('/compile', methods=['POST'])
+@jwt_required()
 def compile_endpoint():
     """
     Endpoint pour traiter un fichier XML envoyé directement 
     dans le body de la requête (content-type : text/xml ou application/xml).
     """
     try:
+
+        # Récupérer l'utilisateur connecté (du JWT)
+        current_user = get_jwt_identity()
+        print(f"Requête effectuée par : {current_user}")
+
         # 1. Récupère le contenu brut de la requête
         xml_content = request.get_data(as_text=True)  # as_text=True => str, sinon bytes
         
@@ -47,6 +83,7 @@ def compile_endpoint():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/build', methods=['POST'])
+@jwt_required()
 def build_endpoint():
     """
     Endpoint pour générer une arborescence de projet à partir d'un fichier YAML.
