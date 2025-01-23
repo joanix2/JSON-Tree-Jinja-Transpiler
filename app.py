@@ -143,7 +143,26 @@ def build_endpoint():
         return jsonify({
             "error": str(e)
         }), 500
+    
+@app.route('/check-mongo', methods=['GET'])
+def check_mongo():
+    """
+    Vérifie la connexion à la base de données MongoDB.
+    """
+    try:
+        # Test de connexion en listant les bases de données
+        db_list = client.list_database_names()
+        return jsonify({
+            "message": "Connexion à MongoDB réussie.",
+            # "databases": db_list
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "message": "Impossible de se connecter à MongoDB.",
+            "error": str(e)
+        }), 500
+
 
 if __name__ == '__main__':
     # Par défaut, Flask écoute sur le port 5000
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

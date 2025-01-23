@@ -1,10 +1,11 @@
+import os
 from pymongo import MongoClient
 
-# Informations de connexion
-MONGO_HOST = "localhost"  # L'hôte Docker exposé
-MONGO_PORT = 27017       # Le port par défaut
-MONGO_USER = "admin"     # Nom d'utilisateur défini dans la commande Docker
-MONGO_PASSWORD = "password"  # Mot de passe défini dans la commande Docker
+# Lire les variables d'environnement
+MONGO_HOST = os.getenv("MONGO_HOST", "localhost")  # Valeur par défaut : localhost
+MONGO_PORT = int(os.getenv("MONGO_PORT", 27017))  # Valeur par défaut : 27017
+MONGO_USER = os.getenv("MONGO_USER", "admin")  # Valeur par défaut : admin
+MONGO_PASSWORD = os.getenv("MONGO_PASSWORD", "password")  # Valeur par défaut : password
 
 def connect_to_mongo():
     """
