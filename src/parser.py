@@ -1,7 +1,7 @@
 import os
 import xml.etree.ElementTree as ET
-from src.node import Node
-from src.jinja.template_services import get_template
+from ..src.node import Node
+from ..src.jinja.template_services import get_template
 
 # Default output file
 OUTPUT_XML_FILE = os.path.join("output","consolidated_output.xml")
