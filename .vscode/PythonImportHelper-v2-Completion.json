@@ -1,0 +1,245 @@
+[
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "StrictUndefined",
+        "importPath": "jinja2",
+        "description": "jinja2",
+        "isExtraImport": true,
+        "detail": "jinja2",
+        "documentation": {}
+    },
+    {
+        "label": "Template",
+        "importPath": "jinja2",
+        "description": "jinja2",
+        "isExtraImport": true,
+        "detail": "jinja2",
+        "documentation": {}
+    },
+    {
+        "label": "Template",
+        "importPath": "jinja2",
+        "description": "jinja2",
+        "isExtraImport": true,
+        "detail": "jinja2",
+        "documentation": {}
+    },
+    {
+        "label": "yaml",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "yaml",
+        "description": "yaml",
+        "detail": "yaml",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "xml.etree.ElementTree",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "xml.etree.ElementTree",
+        "description": "xml.etree.ElementTree",
+        "detail": "xml.etree.ElementTree",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "importPath": "src.node",
+        "description": "src.node",
+        "isExtraImport": true,
+        "detail": "src.node",
+        "documentation": {}
+    },
+    {
+        "label": "get_template",
+        "importPath": "src.jinja.template_services",
+        "description": "src.jinja.template_services",
+        "isExtraImport": true,
+        "detail": "src.jinja.template_services",
+        "documentation": {}
+    },
+    {
+        "label": "click",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "click",
+        "description": "click",
+        "detail": "click",
+        "documentation": {}
+    },
+    {
+        "label": "parse_xml_file",
+        "importPath": "src.parser",
+        "description": "src.parser",
+        "isExtraImport": true,
+        "detail": "src.parser",
+        "documentation": {}
+    },
+    {
+        "label": "build_infrastructure",
+        "importPath": "src.build",
+        "description": "src.build",
+        "isExtraImport": true,
+        "detail": "src.build",
+        "documentation": {}
+    },
+    {
+        "label": "create_template",
+        "kind": 2,
+        "importPath": "src.jinja.template_services",
+        "description": "src.jinja.template_services",
+        "peekOfCode": "def create_template(file_name: str, content: str = \"\"):\n    \"\"\"\n    Create a new template file with the given name and optional content.\n    :param file_name: Name of the template file to create.\n    :param content: Initial content to write into the template (default is empty).\n    \"\"\"\n    file_path = os.path.join(TEMPLATE_DIR, file_name)\n    if os.path.exists(file_path):\n        raise FileExistsError(f\"Template file '{file_name}' already exists.\")\n    with open(file_path, 'w') as template_file:",
+        "detail": "src.jinja.template_services",
+        "documentation": {}
+    },
+    {
+        "label": "update_template",
+        "kind": 2,
+        "importPath": "src.jinja.template_services",
+        "description": "src.jinja.template_services",
+        "peekOfCode": "def update_template(file_name: str, new_content: str):\n    \"\"\"\n    Update an existing template file with new content.\n    :param file_name: Name of the template file to update.\n    :param new_content: New content to replace the existing template content.\n    \"\"\"\n    file_path = os.path.join(TEMPLATE_DIR, file_name)\n    if not os.path.exists(file_path):\n        raise FileNotFoundError(f\"Template file '{file_name}' does not exist.\")\n    with open(file_path, 'w') as template_file:",
+        "detail": "src.jinja.template_services",
+        "documentation": {}
+    },
+    {
+        "label": "compile_template",
+        "kind": 2,
+        "importPath": "src.jinja.template_services",
+        "description": "src.jinja.template_services",
+        "peekOfCode": "def compile_template(template_name: str, args: dict) -> str:\n    \"\"\"\n    Compile a template by filling it with the provided arguments.\n    :param template_name: Name of the template file to compile.\n    :param args: Dictionary of arguments to render in the template.\n    :return: Rendered template content as a string.\n    \"\"\"   \n    template = get_template(template_name)\n    rendered_content = template.render(args)\n    return rendered_content",
+        "detail": "src.jinja.template_services",
+        "documentation": {}
+    },
+    {
+        "label": "get_template",
+        "kind": 2,
+        "importPath": "src.jinja.template_services",
+        "description": "src.jinja.template_services",
+        "peekOfCode": "def get_template(template_name: str) -> Template:\n    file_path = os.path.join(TEMPLATE_DIR, template_name)\n    if not os.path.exists(file_path):\n        raise FileNotFoundError(f\"Template file '{template_name}' does not exist.\")\n    with open(file_path, 'r', encoding='utf-8') as template_file:\n        template_content = template_file.read()\n    return Template(template_content, undefined=StrictUndefined)",
+        "detail": "src.jinja.template_services",
+        "documentation": {}
+    },
+    {
+        "label": "TEMPLATE_DIR",
+        "kind": 5,
+        "importPath": "src.jinja.template_services",
+        "description": "src.jinja.template_services",
+        "peekOfCode": "TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), \"templates\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATE_DIR, exist_ok=True)\ndef create_template(file_name: str, content: str = \"\"):\n    \"\"\"\n    Create a new template file with the given name and optional content.\n    :param file_name: Name of the template file to create.\n    :param content: Initial content to write into the template (default is empty).\n    \"\"\"\n    file_path = os.path.join(TEMPLATE_DIR, file_name)",
+        "detail": "src.jinja.template_services",
+        "documentation": {}
+    },
+    {
+        "label": "create_structure",
+        "kind": 2,
+        "importPath": "src.build",
+        "description": "src.build",
+        "peekOfCode": "def create_structure(base_path, structure):\n    \"\"\"\n    Crée une arborescence de répertoires et fichiers à partir de la structure donnée.\n    :param base_path: Répertoire de base pour créer l'arborescence.\n    :param structure: Liste des éléments à créer (répertoires ou fichiers).\n    \"\"\"\n    for item in structure:\n        item_path = os.path.join(base_path, item['name'])\n        if item['type'] == 'directory':\n            # Créer un répertoire",
+        "detail": "src.build",
+        "documentation": {}
+    },
+    {
+        "label": "build_infrastructure",
+        "kind": 2,
+        "importPath": "src.build",
+        "description": "src.build",
+        "peekOfCode": "def build_infrastructure(config_file):\n    try:\n        # Charger le fichier YAML\n        with open(config_file, \"r\") as f:\n            config = yaml.safe_load(f)\n        # Récupérer les informations principales\n        project_name = config['project_name']\n        output_dir = config['output_dir']\n        structure = config['structure']\n        # Chemin de base",
+        "detail": "src.build",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "kind": 6,
+        "importPath": "src.node",
+        "description": "src.node",
+        "peekOfCode": "class Node:\n    def __init__(self, tag: str, template:Template, children: Optional[List[\"Node\"]]=None, **args):\n        \"\"\"\n        Initialise un nœud avec un tag, un template, des enfants, et des arguments supplémentaires.\n        :param tag: Le nom de la balise.\n        :param template: Le contenu du template (string).\n        :param children: Une liste de nœuds enfants (par défaut, vide).\n        :param args: Autres arguments passés pour le rendu du template.\n        \"\"\"\n        self.tag = tag",
+        "detail": "src.node",
+        "documentation": {}
+    },
+    {
+        "label": "rec_xml_parser",
+        "kind": 2,
+        "importPath": "src.parser",
+        "description": "src.parser",
+        "peekOfCode": "def rec_xml_parser(xml_node):\n    \"\"\"\n    Recursively parses an XML node and its children, returning a Node object\n    that renders itself and its children.\n    :param xml_node: The current XML element.\n    :return: A Node object representing the current XML element and its children.\n    \"\"\"\n    children = []\n    for child in xml_node:\n        child_node = rec_xml_parser(child)",
+        "detail": "src.parser",
+        "documentation": {}
+    },
+    {
+        "label": "parse_xml_file",
+        "kind": 2,
+        "importPath": "src.parser",
+        "description": "src.parser",
+        "peekOfCode": "def parse_xml_file(xml_tree_root: ET.Element, output_file=OUTPUT_XML_FILE):\n    \"\"\"\n    Parse an XML file and consolidate all rendered content into a single XML file.\n    :param xml_file_path: Path to the XML file to parse.\n    :param output_file: Path to the consolidated output XML file.\n    \"\"\"\n    # Start the recursive parsing process\n    root_node = rec_xml_parser(xml_tree_root)\n    #print(root_node)\n    # Render the entire tree starting from the root node",
+        "detail": "src.parser",
+        "documentation": {}
+    },
+    {
+        "label": "OUTPUT_XML_FILE",
+        "kind": 5,
+        "importPath": "src.parser",
+        "description": "src.parser",
+        "peekOfCode": "OUTPUT_XML_FILE = os.path.join(\"output\",\"consolidated_output.xml\")\n# Ensure the output directory exists\nos.makedirs(os.path.dirname(OUTPUT_XML_FILE), exist_ok=True)\ndef rec_xml_parser(xml_node):\n    \"\"\"\n    Recursively parses an XML node and its children, returning a Node object\n    that renders itself and its children.\n    :param xml_node: The current XML element.\n    :return: A Node object representing the current XML element and its children.\n    \"\"\"",
+        "detail": "src.parser",
+        "documentation": {}
+    },
+    {
+        "label": "cli",
+        "kind": 2,
+        "importPath": "cli",
+        "description": "cli",
+        "peekOfCode": "def cli():\n    \"\"\"\n    CLI pour la gestion des templates et des projets.\n    \"\"\"\n    pass\n@cli.command()\n@click.argument(\"input_file\", type=click.Path(exists=True), default=\"main.xml\")\n@click.option(\"--output-dir\", \"-o\", type=click.Path(), default=INFRASTRUCTURE, help=\"Répertoire de sortie pour les fichiers générés.\")\ndef compile(input_file, output_dir):\n    \"\"\"",
+        "detail": "cli",
+        "documentation": {}
+    },
+    {
+        "label": "compile",
+        "kind": 2,
+        "importPath": "cli",
+        "description": "cli",
+        "peekOfCode": "def compile(input_file, output_dir):\n    \"\"\"\n    Traite un fichier XML et génère des fichiers à partir de templates.\n    Arguments :\n        INPUT_FILE : Le fichier XML à traiter (par défaut : main.xml).\n    Options :\n        --output-dir, -o : Répertoire de sortie pour les fichiers générés (par défaut : 'output').\n    \"\"\"\n    click.echo(f\"Processing XML file: {input_file}\")\n    click.echo(f\"Output directory: {output_dir}\")",
+        "detail": "cli",
+        "documentation": {}
+    },
+    {
+        "label": "build",
+        "kind": 2,
+        "importPath": "cli",
+        "description": "cli",
+        "peekOfCode": "def build(config_file):\n    \"\"\"\n    Génère une arborescence de projet à partir d'un fichier YAML.\n    Options :\n        --config-file, -c : Fichier YAML décrivant la structure du projet (par défaut : 'infrastructure.yml').\n    \"\"\"\n    click.echo(f\"Loading configuration from: {config_file}\")\n    build_infrastructure(config_file)\nif __name__ == \"__main__\":\n    cli()",
+        "detail": "cli",
+        "documentation": {}
+    },
+    {
+        "label": "INFRASTRUCTURE",
+        "kind": 5,
+        "importPath": "cli",
+        "description": "cli",
+        "peekOfCode": "INFRASTRUCTURE = os.path.join(\"output\",\"infrastructure.yml\")\n@click.group()\ndef cli():\n    \"\"\"\n    CLI pour la gestion des templates et des projets.\n    \"\"\"\n    pass\n@cli.command()\n@click.argument(\"input_file\", type=click.Path(exists=True), default=\"main.xml\")\n@click.option(\"--output-dir\", \"-o\", type=click.Path(), default=INFRASTRUCTURE, help=\"Répertoire de sortie pour les fichiers générés.\")",
+        "detail": "cli",
+        "documentation": {}
+    }
+]

@@ -1,0 +1,11 @@
+<project>
+    <directory>
+        <file>
+                <field name="Id" type="int" required="true" primary-key="true" auto-increment="true" />
+                <field name="Name" type="string" required="true" max-length="100" annotations="Required,MaxLength(100)" />
+                <field name="Age" type="int" required="true" min="18" max="100" annotations="Range(18, 100)" />
+                <field name="CreatedAt" type="DateTime" required="true" default-value="DateTime.UtcNow" annotations="Required" />
+                <field name="IsActive" type="bool" required="false" default-value="true" />
+        </file>
+    </directory>
+</project>

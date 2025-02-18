@@ -1,7 +1,7 @@
 import os
 import xml.etree.ElementTree as ET
-from ..src.node import Node
-from ..src.jinja.template_services import get_template
+from src.node import Node
+from src.jinja.template_services import get_template
 
 # Default output file
 OUTPUT_XML_FILE = os.path.join("output","consolidated_output.xml")
@@ -37,10 +37,10 @@ def parse_xml_file(xml_tree_root: ET.Element, output_file=OUTPUT_XML_FILE):
 
     # Start the recursive parsing process
     root_node = rec_xml_parser(xml_tree_root)
-    print(root_node)
+    #print(root_node)
 
     # Render the entire tree starting from the root node
-    rendered_content = root_node.compile()
+    rendered_content = root_node.default
 
     # Write the rendered content to the output file
     os.makedirs(os.path.dirname(output_file), exist_ok=True)

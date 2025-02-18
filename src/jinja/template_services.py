@@ -1,5 +1,5 @@
 import os
-from jinja2 import Template
+from jinja2 import StrictUndefined, Template
 
 # Directory for templates
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "templates")
@@ -57,4 +57,4 @@ def get_template(template_name: str) -> Template:
     with open(file_path, 'r', encoding='utf-8') as template_file:
         template_content = template_file.read()
     
-    return Template(template_content)
+    return Template(template_content, undefined=StrictUndefined)

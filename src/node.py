@@ -13,10 +13,10 @@ class Node:
         """
         self.tag = tag
         self.template = template
-        self.children = children if children else []
         self.args = args
+        self.args["children"] = children if children else []
 
-    def compile(self, output_type=None):
+    def __getattr__(self, item):
         """
         Compile le template en ajoutant `output_type` aux arguments et en rendant les enfants récursivement.
 
@@ -27,13 +27,9 @@ class Node:
         if not self.template:
             raise ValueError(f"Node '{self.tag}' cannot be compiled because it has no template.")
         
-        # Ajouter output_type à self.args si spécifié
-        if output_type:
-            self.args["output_type"] = output_type
-
-        # Compiler les enfants et les inclure dans le contexte
-        # rendered_children = [child.compile(output_type) for child in self.children]
-        self.args["children"] = self.children
+        # Ajouter type à self.args si spécifié
+        if item:
+            self.args["type"] = item
 
         # Rendre le template avec le contexte
         rendered_content = self.template.render(self.args)
