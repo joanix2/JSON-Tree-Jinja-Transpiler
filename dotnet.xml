@@ -1,11 +1,13 @@
 <project>
     <directory>
         <file name="models.cs">
+            <model name="User">
                 <field name="Id" type="int" required="true" primaryKey="true" autoIncrement="true" />
                 <field name="Name" type="string" required="true" maxLength="100"/>
                 <field name="Age" type="int" required="true" min="18" max="100"/>
                 <field name="CreatedAt" type="DateTime" required="true" defaultValue="DateTime.UtcNow" />
                 <field name="IsActive" type="bool" required="false" defaultValue="true" />
+            </model>
         </file>
     </directory>
 </project>

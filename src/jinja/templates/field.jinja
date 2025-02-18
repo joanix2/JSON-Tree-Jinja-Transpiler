@@ -1,3 +1,4 @@
+{% if type == "cs" %}
 {%- if primaryKey is defined and primaryKey %}
 [Key]
 {%- endif -%}
@@ -10,4 +11,7 @@
 {%- if min is defined and max is defined %}
 [Range({{ min }}, {{ max }})]
 {%- endif %}
-public {{ type }} {{ name }} { get; set; }{% if defaultValue is defined %} = {{ defaultValue }};{%- else -%}{%- endif -%}
+public {{ type }} {{ name }} { get; set; }{% if defaultValue is defined %} = {{ defaultValue }};
+{%- else -%}
+{%- endif -%}
+{%- endif -%}
