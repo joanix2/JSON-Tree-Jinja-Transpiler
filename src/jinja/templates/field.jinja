@@ -1,13 +1,13 @@
-{%- if primary_key is defined and primary_key %}
+{%- if primaryKey is defined and primaryKey %}
 [Key]
 {%- endif -%}
 {%- if required %}
 [Required]
 {%- endif -%}
-{%- if max_length is defined %}
-[MaxLength({{ max_length }})]
+{%- if maxLength is defined %}
+[MaxLength({{ maxLength }})]
 {%- endif -%}
 {%- if min is defined and max is defined %}
 [Range({{ min }}, {{ max }})]
 {%- endif %}
-public {{ type }} {{ name }} { get; set; }{% if default_value is defined %} = {{ default_value }};{%- else -%}{%- endif -%}
+public {{ type }} {{ name }} { get; set; }{% if defaultValue is defined %} = {{ defaultValue }};{%- else -%}{%- endif -%}
