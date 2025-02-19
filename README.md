@@ -1,6 +1,6 @@
 # XML DSL Compiler Generator
 
-Ce projet est un générateur de DSL qui convertit du code XML grâce à des templates Jinja. L'objectif est d'auto-générer les DSL, de créer des tests associés et d'adopter une philosophie de développement orientée tests (Test Driven Development), où ChatGPT aide à corriger les erreurs.
+Ce projet est un générateur de DSL qui convertit du code XML grâce à des templates Jinja. L'objectif est d'auto-générer les DSL, de créer des tests associés et d'adopter une philosophie de développement orientée tests (Test Driven Development), où un LLMs aide à corriger les erreurs.
 
 ## Commandes disponibles
 
