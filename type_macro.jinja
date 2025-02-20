@@ -1,0 +1,33 @@
+{% macro convert_type(type, is_nullable, output_type) %}
+    {% set type_mapping = {
+        'string': {'prisma': 'String', 'graphql': 'String'},
+        'int': {'prisma': 'Int', 'graphql': 'Int'},
+        'float': {'prisma': 'Float', 'graphql': 'Float'},
+        'boolean': {'prisma': 'Boolean', 'graphql': 'Boolean'},
+        'datetime': {'prisma': 'DateTime', 'graphql': 'DateTime'},
+        'id': {'prisma': 'String', 'graphql': 'ID'}
+    } %}
+    
+    {% if type in type_mapping %}
+        {% set prisma_type = type_mapping[type]['prisma'] %}
+        {% set graphql_type = type_mapping[type]['graphql'] %}
+        
+        {% if output_type == 'prisma' %}
+            {% if is_nullable %}
+                {{ prisma_type }}?
+            {% else %}
+                {{ prisma_type }}
+            {% endif %}
+        {% elif output_type == 'graphql' %}
+            {% if is_nullable %}
+                {{ graphql_type }}
+            {% else %}
+                {{ graphql_type }}!
+            {% endif %}
+        {% else %}
+            Unknown output type
+        {% endif %}
+    {% else %}
+        {{ type }} (Unknown Type)
+    {% endif %}
+{% endmacro %}
