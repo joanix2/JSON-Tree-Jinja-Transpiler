@@ -9,6 +9,22 @@
         "documentation": {}
     },
     {
+        "label": "Environment",
+        "importPath": "jinja2",
+        "description": "jinja2",
+        "isExtraImport": true,
+        "detail": "jinja2",
+        "documentation": {}
+    },
+    {
+        "label": "FileSystemLoader",
+        "importPath": "jinja2",
+        "description": "jinja2",
+        "isExtraImport": true,
+        "detail": "jinja2",
+        "documentation": {}
+    },
+    {
         "label": "StrictUndefined",
         "importPath": "jinja2",
         "description": "jinja2",
@@ -148,7 +164,16 @@
         "kind": 5,
         "importPath": "src.jinja.template_services",
         "description": "src.jinja.template_services",
-        "peekOfCode": "TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), \"templates\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATE_DIR, exist_ok=True)\ndef create_template(file_name: str, content: str = \"\"):\n    \"\"\"\n    Create a new template file with the given name and optional content.\n    :param file_name: Name of the template file to create.\n    :param content: Initial content to write into the template (default is empty).\n    \"\"\"\n    file_path = os.path.join(TEMPLATE_DIR, file_name)",
+        "peekOfCode": "TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), \"templates\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATE_DIR, exist_ok=True)\nenv = Environment(loader=FileSystemLoader(TEMPLATE_DIR))\ndef create_template(file_name: str, content: str = \"\"):\n    \"\"\"\n    Create a new template file with the given name and optional content.\n    :param file_name: Name of the template file to create.\n    :param content: Initial content to write into the template (default is empty).\n    \"\"\"",
+        "detail": "src.jinja.template_services",
+        "documentation": {}
+    },
+    {
+        "label": "env",
+        "kind": 5,
+        "importPath": "src.jinja.template_services",
+        "description": "src.jinja.template_services",
+        "peekOfCode": "env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))\ndef create_template(file_name: str, content: str = \"\"):\n    \"\"\"\n    Create a new template file with the given name and optional content.\n    :param file_name: Name of the template file to create.\n    :param content: Initial content to write into the template (default is empty).\n    \"\"\"\n    file_path = os.path.join(TEMPLATE_DIR, file_name)\n    if os.path.exists(file_path):\n        raise FileExistsError(f\"Template file '{file_name}' already exists.\")",
         "detail": "src.jinja.template_services",
         "documentation": {}
     },

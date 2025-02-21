@@ -1,0 +1,16 @@
+- name: schema.graphql
+  type: file
+  {% if children %}
+  content: |
+  {% for child in children %}
+{{ child.graphql | indent(4, true) }}
+  {%- endfor %}
+  {% endif %}
+- name: schema.prisma
+  type: file
+  {% if children %}
+  content: |
+  {% for child in children %}
+{{ child.prisma | indent(4, true) }}
+  {%- endfor %}
+  {% endif %}

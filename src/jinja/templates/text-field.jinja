@@ -1,9 +1,9 @@
-{% if type == "html" %}
+{% if compilation_mode == "html" %}
 <div>
     <label for="{{ name|lower }}">{{ name }}</label>
     <input type="text" id="{{ name|lower }}" name="{{ name|lower }}" placeholder="{{ placeholder }}" {% if required == "true" %}required{% endif %} />
 </div>
-{% elif type == "css" %}
+{% elif compilation_mode == "css" %}
 #{{ name|lower }} {
     display: block;
     margin-bottom: 10px;

@@ -18,18 +18,18 @@ class Node:
 
     def __getattr__(self, item):
         """
-        Compile le template en ajoutant `output_type` aux arguments et en rendant les enfants récursivement.
+        Compile le template en ajoutant `compilation_mode` aux arguments et en rendant les enfants récursivement.
 
-        :param output_type: Le type de sortie à ajouter aux arguments (ex. 'html' ou 'css').
+        :param compilation_mode: Le type de sortie à ajouter aux arguments (ex. 'html' ou 'css').
         :return: Le rendu du template sous forme de chaîne.
         """
         # Vérifie si le nœud a un template
         if not self.template:
             raise ValueError(f"Node '{self.tag}' cannot be compiled because it has no template.")
         
-        # Ajouter type à self.args si spécifié
+        # Ajouter compilation_mode à self.args si spécifié
         if item:
-            self.args["type"] = item
+            self.args["compilation_mode"] = item
 
         # Rendre le template avec le contexte
         rendered_content = self.template.render(self.args)

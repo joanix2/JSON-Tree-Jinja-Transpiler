@@ -1,11 +1,13 @@
 import os
-from jinja2 import StrictUndefined, Template
+from jinja2 import Environment, FileSystemLoader, StrictUndefined, Template
 
 # Directory for templates
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "templates")
 
 # Ensure the templates directory exists
 os.makedirs(TEMPLATE_DIR, exist_ok=True)
+
+env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 
 def create_template(file_name: str, content: str = ""):
     """
