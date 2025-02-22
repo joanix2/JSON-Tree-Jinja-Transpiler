@@ -1,0 +1,15 @@
+{%- if primaryKey is defined and primaryKey %}
+[Key]
+{%- endif -%}
+{%- if required %}
+[Required]
+{%- endif -%}
+{%- if maxLength is defined %}
+[MaxLength({{ maxLength }})]
+{%- endif -%}
+{%- if min is defined and max is defined %}
+[Range({{ min }}, {{ max }})]
+{%- endif %}
+public {{ type }} {{ name }} { get; set; }{% if defaultValue is defined %} = {{ defaultValue }};
+{%- else -%}
+{%- endif -%}

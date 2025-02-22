@@ -1,0 +1,3 @@
+{% import './macro/type.jinja' as macros %}
+
+{{ name }}: {{ macros.convert_type(type, False, 'prisma') }}

@@ -1,6 +1,6 @@
 <project>
-    <directory>
-        <appolo>
+    <directory name="generated-appolo-api">
+        <appolo-api framwork="appolo">
             <model name="User">
                 <field name="id" type="id" />
                 <field name="name" type="string" />
