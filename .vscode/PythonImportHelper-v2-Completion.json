@@ -41,14 +41,6 @@
         "documentation": {}
     },
     {
-        "label": "Template",
-        "importPath": "jinja2",
-        "description": "jinja2",
-        "isExtraImport": true,
-        "detail": "jinja2",
-        "documentation": {}
-    },
-    {
         "label": "yaml",
         "kind": 6,
         "isExtraImport": true,
@@ -74,6 +66,22 @@
         "documentation": {}
     },
     {
+        "label": "get_template",
+        "importPath": "src.jinja.template_services",
+        "description": "src.jinja.template_services",
+        "isExtraImport": true,
+        "detail": "src.jinja.template_services",
+        "documentation": {}
+    },
+    {
+        "label": "get_templates_names",
+        "importPath": "src.jinja.template_services",
+        "description": "src.jinja.template_services",
+        "isExtraImport": true,
+        "detail": "src.jinja.template_services",
+        "documentation": {}
+    },
+    {
         "label": "xml.etree.ElementTree",
         "kind": 6,
         "isExtraImport": true,
@@ -88,14 +96,6 @@
         "description": "src.node",
         "isExtraImport": true,
         "detail": "src.node",
-        "documentation": {}
-    },
-    {
-        "label": "get_templates",
-        "importPath": "src.jinja.template_services",
-        "description": "src.jinja.template_services",
-        "isExtraImport": true,
-        "detail": "src.jinja.template_services",
         "documentation": {}
     },
     {
@@ -124,20 +124,47 @@
         "documentation": {}
     },
     {
-        "label": "get_templates",
+        "label": "get_templates_names",
         "kind": 2,
         "importPath": "src.jinja.template_services",
         "description": "src.jinja.template_services",
-        "peekOfCode": "def get_templates(template_folder: str) -> dict[str, Template]:\n    folder_path = os.path.join(TEMPLATE_DIR, template_folder)\n    if not os.path.exists(folder_path):\n        raise FileNotFoundError(f\"Template folder '{folder_path}' does not exist.\")\n    templates = {}\n    for filename in os.listdir(folder_path):\n        if filename.endswith('.jinja'):\n            file_path = os.path.join(folder_path, filename)\n            with open(file_path, 'r', encoding='utf-8') as template_file:\n                template_content = template_file.read()",
+        "peekOfCode": "def get_templates_names(template_folder: str) -> set[str]:\n    \"\"\"\n    Retourne un ensemble contenant les noms des fichiers templates (sans l'extension .jinja).\n    \"\"\"\n    folder_path = os.path.join(TEMPLATES_DIR, template_folder)\n    if not os.path.exists(folder_path):\n        raise FileNotFoundError(f\"Le dossier '{folder_path}' n'existe pas.\")\n    templates_names = set()\n    for filename in os.listdir(folder_path):\n        if filename.endswith('.jinja'):",
         "detail": "src.jinja.template_services",
         "documentation": {}
     },
     {
-        "label": "TEMPLATE_DIR",
+        "label": "get_template",
+        "kind": 2,
+        "importPath": "src.jinja.template_services",
+        "description": "src.jinja.template_services",
+        "peekOfCode": "def get_template(template_folder: str, template_name: str, params: dict) -> str:\n    \"\"\"\n    Charge et rend un template avec les paramètres fournis.\n    \"\"\"\n    try:\n        template = env.get_template(f\"{template_folder}/{template_name}.jinja\")\n        return template.render(**params)\n    except Exception as e:\n        raise RuntimeError(f\"Erreur lors du rendu du template '{template_folder}/{template_name}.jinja' : {e}\")\n# def create_template(file_name: str, content: str = \"\"):",
+        "detail": "src.jinja.template_services",
+        "documentation": {}
+    },
+    {
+        "label": "BASE_DIR",
         "kind": 5,
         "importPath": "src.jinja.template_services",
         "description": "src.jinja.template_services",
-        "peekOfCode": "TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), \"templates\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATE_DIR, exist_ok=True)\nenv = Environment(loader=FileSystemLoader(TEMPLATE_DIR))\ndef get_templates(template_folder: str) -> dict[str, Template]:\n    folder_path = os.path.join(TEMPLATE_DIR, template_folder)\n    if not os.path.exists(folder_path):\n        raise FileNotFoundError(f\"Template folder '{folder_path}' does not exist.\")\n    templates = {}\n    for filename in os.listdir(folder_path):",
+        "peekOfCode": "BASE_DIR = os.path.dirname(__file__)\nTEMPLATES_DIR = os.path.join(BASE_DIR, \"templates\")\nMACROS_DIR = os.path.join(BASE_DIR, \"macros\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATES_DIR, exist_ok=True)\nos.makedirs(MACROS_DIR, exist_ok=True)\n# Création de l'environnement Jinja2\nenv = Environment(\n    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),\n    autoescape=True,  # Active l'échappement automatique (utile pour HTML)",
+        "detail": "src.jinja.template_services",
+        "documentation": {}
+    },
+    {
+        "label": "TEMPLATES_DIR",
+        "kind": 5,
+        "importPath": "src.jinja.template_services",
+        "description": "src.jinja.template_services",
+        "peekOfCode": "TEMPLATES_DIR = os.path.join(BASE_DIR, \"templates\")\nMACROS_DIR = os.path.join(BASE_DIR, \"macros\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATES_DIR, exist_ok=True)\nos.makedirs(MACROS_DIR, exist_ok=True)\n# Création de l'environnement Jinja2\nenv = Environment(\n    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),\n    autoescape=True,  # Active l'échappement automatique (utile pour HTML)\n    undefined=StrictUndefined  # Lève une erreur si une variable est manquante",
+        "detail": "src.jinja.template_services",
+        "documentation": {}
+    },
+    {
+        "label": "MACROS_DIR",
+        "kind": 5,
+        "importPath": "src.jinja.template_services",
+        "description": "src.jinja.template_services",
+        "peekOfCode": "MACROS_DIR = os.path.join(BASE_DIR, \"macros\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATES_DIR, exist_ok=True)\nos.makedirs(MACROS_DIR, exist_ok=True)\n# Création de l'environnement Jinja2\nenv = Environment(\n    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),\n    autoescape=True,  # Active l'échappement automatique (utile pour HTML)\n    undefined=StrictUndefined  # Lève une erreur si une variable est manquante\n)",
         "detail": "src.jinja.template_services",
         "documentation": {}
     },
@@ -146,7 +173,7 @@
         "kind": 5,
         "importPath": "src.jinja.template_services",
         "description": "src.jinja.template_services",
-        "peekOfCode": "env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))\ndef get_templates(template_folder: str) -> dict[str, Template]:\n    folder_path = os.path.join(TEMPLATE_DIR, template_folder)\n    if not os.path.exists(folder_path):\n        raise FileNotFoundError(f\"Template folder '{folder_path}' does not exist.\")\n    templates = {}\n    for filename in os.listdir(folder_path):\n        if filename.endswith('.jinja'):\n            file_path = os.path.join(folder_path, filename)\n            with open(file_path, 'r', encoding='utf-8') as template_file:",
+        "peekOfCode": "env = Environment(\n    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),\n    autoescape=True,  # Active l'échappement automatique (utile pour HTML)\n    undefined=StrictUndefined  # Lève une erreur si une variable est manquante\n)\ndef get_templates_names(template_folder: str) -> set[str]:\n    \"\"\"\n    Retourne un ensemble contenant les noms des fichiers templates (sans l'extension .jinja).\n    \"\"\"\n    folder_path = os.path.join(TEMPLATES_DIR, template_folder)",
         "detail": "src.jinja.template_services",
         "documentation": {}
     },
@@ -173,7 +200,7 @@
         "kind": 6,
         "importPath": "src.node",
         "description": "src.node",
-        "peekOfCode": "class Node:\n    def __init__(self, tag: str, templates:dict[str, Template], children: Optional[List[\"Node\"]]=None, **args):\n        \"\"\"\n        Initialise un nœud avec un tag, un template, des enfants, et des arguments supplémentaires.\n        :param tag: Le nom de la balise.\n        :param template: Le contenu du template (string).\n        :param children: Une liste de nœuds enfants (par défaut, vide).\n        :param args: Autres arguments passés pour le rendu du template.\n        \"\"\"\n        self.tag = tag",
+        "peekOfCode": "class Node:\n    def __init__(self, tag: str, children: Optional[List[\"Node\"]]=None, **args):\n        \"\"\"\n        Initialise un nœud avec un tag, un template, des enfants, et des arguments supplémentaires.\n        :param tag: Le nom de la balise.\n        :param template: Le contenu du template (string).\n        :param children: Une liste de nœuds enfants (par défaut, vide).\n        :param args: Autres arguments passés pour le rendu du template.\n        \"\"\"\n        self.tag = tag",
         "detail": "src.node",
         "documentation": {}
     },
@@ -182,7 +209,7 @@
         "kind": 2,
         "importPath": "src.parser",
         "description": "src.parser",
-        "peekOfCode": "def rec_xml_parser(xml_node):\n    \"\"\"\n    Recursively parses an XML node and its children, returning a Node object\n    that renders itself and its children.\n    :param xml_node: The current XML element.\n    :return: A Node object representing the current XML element and its children.\n    \"\"\"\n    children = []\n    for child in xml_node:\n        child_node = rec_xml_parser(child)",
+        "peekOfCode": "def rec_xml_parser(xml_node):\n    \"\"\"\n    Recursively parses an XML node and its children, returning a Node object\n    that renders itself and its children.\n    :param xml_node: The current XML element.\n    :return: A Node object representing the current XML element and its children.\n    \"\"\"\n    children = [rec_xml_parser(child) for child in xml_node]\n    return Node(tag=xml_node.tag, children=children, **xml_node.attrib)\ndef parse_xml_file(xml_tree_root: ET.Element, output_file=OUTPUT_XML_FILE):",
         "detail": "src.parser",
         "documentation": {}
     },
@@ -191,7 +218,7 @@
         "kind": 2,
         "importPath": "src.parser",
         "description": "src.parser",
-        "peekOfCode": "def parse_xml_file(xml_tree_root: ET.Element, output_file=OUTPUT_XML_FILE):\n    \"\"\"\n    Parse an XML file and consolidate all rendered content into a single XML file.\n    :param xml_file_path: Path to the XML file to parse.\n    :param output_file: Path to the consolidated output XML file.\n    \"\"\"\n    # Start the recursive parsing process\n    root_node = rec_xml_parser(xml_tree_root)\n    #print(root_node)\n    # Render the entire tree starting from the root node",
+        "peekOfCode": "def parse_xml_file(xml_tree_root: ET.Element, output_file=OUTPUT_XML_FILE):\n    \"\"\"\n    Parse an XML file and consolidate all rendered content into a single XML file.\n    :param xml_file_path: Path to the XML file to parse.\n    :param output_file: Path to the consolidated output XML file.\n    \"\"\"\n    # Start the recursive parsing process\n    root_node = rec_xml_parser(xml_tree_root)\n    # Render the entire tree starting from the root node\n    rendered_content = root_node.default",
         "detail": "src.parser",
         "documentation": {}
     },

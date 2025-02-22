@@ -2,32 +2,47 @@ import os
 from jinja2 import Environment, FileSystemLoader, StrictUndefined, Template
 
 # Directory for templates
-TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "templates")
+BASE_DIR = os.path.dirname(__file__)
+TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
+MACROS_DIR = os.path.join(BASE_DIR, "macros")
 
 # Ensure the templates directory exists
-os.makedirs(TEMPLATE_DIR, exist_ok=True)
+os.makedirs(TEMPLATES_DIR, exist_ok=True)
+os.makedirs(MACROS_DIR, exist_ok=True)
 
-env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
+# Création de l'environnement Jinja2
+env = Environment(
+    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),
+    autoescape=True,  # Active l'échappement automatique (utile pour HTML)
+    undefined=StrictUndefined  # Lève une erreur si une variable est manquante
+)
 
-def get_templates(template_folder: str) -> dict[str, Template]:
-    folder_path = os.path.join(TEMPLATE_DIR, template_folder)
-    
+def get_templates_names(template_folder: str) -> set[str]:
+    """
+    Retourne un ensemble contenant les noms des fichiers templates (sans l'extension .jinja).
+    """
+    folder_path = os.path.join(TEMPLATES_DIR, template_folder)
+
     if not os.path.exists(folder_path):
-        raise FileNotFoundError(f"Template folder '{folder_path}' does not exist.")
-    
-    templates = {}
+        raise FileNotFoundError(f"Le dossier '{folder_path}' n'existe pas.")
+
+    templates_names = set()
 
     for filename in os.listdir(folder_path):
         if filename.endswith('.jinja'):
-            file_path = os.path.join(folder_path, filename)
-            with open(file_path, 'r', encoding='utf-8') as template_file:
-                template_content = template_file.read()
-            
-            # Retire l'extension `.jinja` pour l'utiliser comme clé
-            template_name = filename.rsplit('.', 1)[0]
-            templates[template_name] = Template(template_content, undefined=StrictUndefined)
+            templates_names.add(filename.rsplit('.', 1)[0])  # Retirer l'extension
 
-    return templates
+    return templates_names
+
+def get_template(template_folder: str, template_name: str, params: dict) -> str:
+    """
+    Charge et rend un template avec les paramètres fournis.
+    """
+    try:
+        template = env.get_template(f"{template_folder}/{template_name}.jinja")
+        return template.render(**params)
+    except Exception as e:
+        raise RuntimeError(f"Erreur lors du rendu du template '{template_folder}/{template_name}.jinja' : {e}")
 
 # def create_template(file_name: str, content: str = ""):
 #     """
@@ -58,25 +73,3 @@ def get_templates(template_folder: str) -> dict[str, Template]:
 #     with open(file_path, 'w') as template_file:
 #         template_file.write(new_content)
 #     print(f"Template '{file_name}' updated successfully.")
-
-# def compile_template(template_name: str, args: dict) -> str:
-#     """
-#     Compile a template by filling it with the provided arguments.
-    
-#     :param template_name: Name of the template file to compile.
-#     :param args: Dictionary of arguments to render in the template.
-#     :return: Rendered template content as a string.
-#     """   
-#     template = get_template(template_name)
-#     rendered_content = template.render(args)
-#     return rendered_content
-
-# def get_template(template_name: str) -> Template:
-#     file_path = os.path.join(TEMPLATE_DIR, template_name)
-#     if not os.path.exists(file_path):
-#         raise FileNotFoundError(f"Template file '{template_name}' does not exist.")
-    
-#     with open(file_path, 'r', encoding='utf-8') as template_file:
-#         template_content = template_file.read()
-    
-#     return Template(template_content, undefined=StrictUndefined)
