@@ -1,5 +1,5 @@
-{% macro convert_type(type, is_nullable, output_type) %}
-    {% set type_mapping = {
+{%- macro convert_type(type, is_nullable, output_type) -%}
+    {%- set type_mapping = {
         'string': {'prisma': 'String', 'graphql': 'String'},
         'int': {'prisma': 'Int', 'graphql': 'Int'},
         'float': {'prisma': 'Float', 'graphql': 'Float'},
@@ -7,37 +7,37 @@
         'datetime': {'prisma': 'DateTime', 'graphql': 'DateTime'},
         'id': {'prisma': 'String', 'graphql': 'ID'},
         'json': {'prisma': 'Json', 'graphql': 'Json'}
-    } %}
+    } -%}
 
-    {% if type.startswith('List<') and type.endswith('>') %}
-        {% set inner_type = type[5:-1] %}
-        {% set converted_inner = convert_type(inner_type, False, output_type) %}
-        {% if output_type == 'prisma' %}
-            {{ converted_inner }}[]{% if is_nullable %}?{% endif %}
-        {% elif output_type == 'graphql' %}
-            [{{ converted_inner }}]{% if not is_nullable %}!{% endif %}
-        {% endif %}
+    {%- if type.startswith('List<') and type.endswith('>') -%}
+        {%- set inner_type = type[5:-1] -%}
+        {%- set converted_inner = convert_type(inner_type, False, output_type) -%}
+        {%- if output_type == 'prisma' -%}
+            {{ converted_inner }}[]{%- if is_nullable -%}?{%- endif -%}
+        {%- elif output_type == 'graphql' -%}
+            [{{ converted_inner }}]{%- if not is_nullable -%}!{%- endif -%}
+        {%- endif -%}
     
-    {% elif type.startswith('Map<') and type.endswith('>') %}
-        {% set inner_type = type[4:-1] %}
-        {% set converted_inner = convert_type(inner_type, False, output_type) %}
-        {% if output_type == 'prisma' %}
-            Json{% if is_nullable %}?{% endif %}
-        {% elif output_type == 'graphql' %}
-            Json{% if not is_nullable %}!{% endif %}
-        {% endif %}
+    {%- elif type.startswith('Map<') and type.endswith('>') -%}
+        {%- set inner_type = type[4:-1] -%}
+        {%- set converted_inner = convert_type(inner_type, False, output_type) -%}
+        {%- if output_type == 'prisma' -%}
+            Json{%- if is_nullable -%}?{%- endif -%}
+        {%- elif output_type == 'graphql' -%}
+            Json{%- if not is_nullable -%}!{%- endif -%}
+        {%- endif -%}
 
-    {% elif type in type_mapping %}
-        {% set prisma_type = type_mapping[type]['prisma'] %}
-        {% set graphql_type = type_mapping[type]['graphql'] %}
+    {%- elif type in type_mapping -%}
+        {%- set prisma_type = type_mapping[type]['prisma'] -%}
+        {%- set graphql_type = type_mapping[type]['graphql'] -%}
         
-        {% if output_type == 'prisma' %}
-            {{ prisma_type }}{% if is_nullable %}?{% endif %}
-        {% elif output_type == 'graphql' %}
-            {{ graphql_type }}{% if not is_nullable %}!{% endif %}
-        {% endif %}
+        {%- if output_type == 'prisma' -%}
+            {{ prisma_type }}{%- if is_nullable -%}?{%- endif -%}
+        {%- elif output_type == 'graphql' -%}
+            {{ graphql_type }}{%- if not is_nullable -%}!{%- endif -%}
+        {%- endif -%}
     
-    {% else %}
-        {{ type }} (Unknown Type)
-    {% endif %}
-{% endmacro %}
+    {%- else -%}
+        {{ type }}
+    {%- endif -%}
+{%- endmacro -%}
