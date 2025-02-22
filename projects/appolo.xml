@@ -13,6 +13,6 @@
                 <field name="url" type="string" />
                 <field name="postedBy" type="User" />
             </model>
-        </appolo>
+        </appolo-api>
     </directory>
 </project>

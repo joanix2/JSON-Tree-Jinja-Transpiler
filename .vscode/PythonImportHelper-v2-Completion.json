@@ -91,7 +91,7 @@
         "documentation": {}
     },
     {
-        "label": "get_template",
+        "label": "get_templates",
         "importPath": "src.jinja.template_services",
         "description": "src.jinja.template_services",
         "isExtraImport": true,
@@ -124,38 +124,11 @@
         "documentation": {}
     },
     {
-        "label": "create_template",
+        "label": "get_templates",
         "kind": 2,
         "importPath": "src.jinja.template_services",
         "description": "src.jinja.template_services",
-        "peekOfCode": "def create_template(file_name: str, content: str = \"\"):\n    \"\"\"\n    Create a new template file with the given name and optional content.\n    :param file_name: Name of the template file to create.\n    :param content: Initial content to write into the template (default is empty).\n    \"\"\"\n    file_path = os.path.join(TEMPLATE_DIR, file_name)\n    if os.path.exists(file_path):\n        raise FileExistsError(f\"Template file '{file_name}' already exists.\")\n    with open(file_path, 'w') as template_file:",
-        "detail": "src.jinja.template_services",
-        "documentation": {}
-    },
-    {
-        "label": "update_template",
-        "kind": 2,
-        "importPath": "src.jinja.template_services",
-        "description": "src.jinja.template_services",
-        "peekOfCode": "def update_template(file_name: str, new_content: str):\n    \"\"\"\n    Update an existing template file with new content.\n    :param file_name: Name of the template file to update.\n    :param new_content: New content to replace the existing template content.\n    \"\"\"\n    file_path = os.path.join(TEMPLATE_DIR, file_name)\n    if not os.path.exists(file_path):\n        raise FileNotFoundError(f\"Template file '{file_name}' does not exist.\")\n    with open(file_path, 'w') as template_file:",
-        "detail": "src.jinja.template_services",
-        "documentation": {}
-    },
-    {
-        "label": "compile_template",
-        "kind": 2,
-        "importPath": "src.jinja.template_services",
-        "description": "src.jinja.template_services",
-        "peekOfCode": "def compile_template(template_name: str, args: dict) -> str:\n    \"\"\"\n    Compile a template by filling it with the provided arguments.\n    :param template_name: Name of the template file to compile.\n    :param args: Dictionary of arguments to render in the template.\n    :return: Rendered template content as a string.\n    \"\"\"   \n    template = get_template(template_name)\n    rendered_content = template.render(args)\n    return rendered_content",
-        "detail": "src.jinja.template_services",
-        "documentation": {}
-    },
-    {
-        "label": "get_template",
-        "kind": 2,
-        "importPath": "src.jinja.template_services",
-        "description": "src.jinja.template_services",
-        "peekOfCode": "def get_template(template_name: str) -> Template:\n    file_path = os.path.join(TEMPLATE_DIR, template_name)\n    if not os.path.exists(file_path):\n        raise FileNotFoundError(f\"Template file '{template_name}' does not exist.\")\n    with open(file_path, 'r', encoding='utf-8') as template_file:\n        template_content = template_file.read()\n    return Template(template_content, undefined=StrictUndefined)",
+        "peekOfCode": "def get_templates(template_folder: str) -> dict[str, Template]:\n    folder_path = os.path.join(TEMPLATE_DIR, template_folder)\n    if not os.path.exists(folder_path):\n        raise FileNotFoundError(f\"Template folder '{folder_path}' does not exist.\")\n    templates = {}\n    for filename in os.listdir(folder_path):\n        if filename.endswith('.jinja'):\n            file_path = os.path.join(folder_path, filename)\n            with open(file_path, 'r', encoding='utf-8') as template_file:\n                template_content = template_file.read()",
         "detail": "src.jinja.template_services",
         "documentation": {}
     },
@@ -164,7 +137,7 @@
         "kind": 5,
         "importPath": "src.jinja.template_services",
         "description": "src.jinja.template_services",
-        "peekOfCode": "TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), \"templates\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATE_DIR, exist_ok=True)\nenv = Environment(loader=FileSystemLoader(TEMPLATE_DIR))\ndef create_template(file_name: str, content: str = \"\"):\n    \"\"\"\n    Create a new template file with the given name and optional content.\n    :param file_name: Name of the template file to create.\n    :param content: Initial content to write into the template (default is empty).\n    \"\"\"",
+        "peekOfCode": "TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), \"templates\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATE_DIR, exist_ok=True)\nenv = Environment(loader=FileSystemLoader(TEMPLATE_DIR))\ndef get_templates(template_folder: str) -> dict[str, Template]:\n    folder_path = os.path.join(TEMPLATE_DIR, template_folder)\n    if not os.path.exists(folder_path):\n        raise FileNotFoundError(f\"Template folder '{folder_path}' does not exist.\")\n    templates = {}\n    for filename in os.listdir(folder_path):",
         "detail": "src.jinja.template_services",
         "documentation": {}
     },
@@ -173,7 +146,7 @@
         "kind": 5,
         "importPath": "src.jinja.template_services",
         "description": "src.jinja.template_services",
-        "peekOfCode": "env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))\ndef create_template(file_name: str, content: str = \"\"):\n    \"\"\"\n    Create a new template file with the given name and optional content.\n    :param file_name: Name of the template file to create.\n    :param content: Initial content to write into the template (default is empty).\n    \"\"\"\n    file_path = os.path.join(TEMPLATE_DIR, file_name)\n    if os.path.exists(file_path):\n        raise FileExistsError(f\"Template file '{file_name}' already exists.\")",
+        "peekOfCode": "env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))\ndef get_templates(template_folder: str) -> dict[str, Template]:\n    folder_path = os.path.join(TEMPLATE_DIR, template_folder)\n    if not os.path.exists(folder_path):\n        raise FileNotFoundError(f\"Template folder '{folder_path}' does not exist.\")\n    templates = {}\n    for filename in os.listdir(folder_path):\n        if filename.endswith('.jinja'):\n            file_path = os.path.join(folder_path, filename)\n            with open(file_path, 'r', encoding='utf-8') as template_file:",
         "detail": "src.jinja.template_services",
         "documentation": {}
     },
@@ -200,7 +173,7 @@
         "kind": 6,
         "importPath": "src.node",
         "description": "src.node",
-        "peekOfCode": "class Node:\n    def __init__(self, tag: str, template:Template, children: Optional[List[\"Node\"]]=None, **args):\n        \"\"\"\n        Initialise un nœud avec un tag, un template, des enfants, et des arguments supplémentaires.\n        :param tag: Le nom de la balise.\n        :param template: Le contenu du template (string).\n        :param children: Une liste de nœuds enfants (par défaut, vide).\n        :param args: Autres arguments passés pour le rendu du template.\n        \"\"\"\n        self.tag = tag",
+        "peekOfCode": "class Node:\n    def __init__(self, tag: str, templates:dict[str, Template], children: Optional[List[\"Node\"]]=None, **args):\n        \"\"\"\n        Initialise un nœud avec un tag, un template, des enfants, et des arguments supplémentaires.\n        :param tag: Le nom de la balise.\n        :param template: Le contenu du template (string).\n        :param children: Une liste de nœuds enfants (par défaut, vide).\n        :param args: Autres arguments passés pour le rendu du template.\n        \"\"\"\n        self.tag = tag",
         "detail": "src.node",
         "documentation": {}
     },

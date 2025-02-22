@@ -2,7 +2,7 @@ from typing import List, Optional
 from jinja2 import Template
 
 class Node:
-    def __init__(self, tag: str, template:Template, children: Optional[List["Node"]]=None, **args):
+    def __init__(self, tag: str, templates:dict[str, Template], children: Optional[List["Node"]]=None, **args):
         """
         Initialise un nœud avec un tag, un template, des enfants, et des arguments supplémentaires.
 
@@ -12,7 +12,7 @@ class Node:
         :param args: Autres arguments passés pour le rendu du template.
         """
         self.tag = tag
-        self.template = template
+        self.templates = templates
         self.args = args
         self.args["children"] = children if children else []
 
@@ -23,16 +23,14 @@ class Node:
         :param compilation_mode: Le type de sortie à ajouter aux arguments (ex. 'html' ou 'css').
         :return: Le rendu du template sous forme de chaîne.
         """
+        template = self.templates.get(item)
+
         # Vérifie si le nœud a un template
-        if not self.template:
+        if not template:
             raise ValueError(f"Node '{self.tag}' cannot be compiled because it has no template.")
-        
-        # Ajouter compilation_mode à self.args si spécifié
-        if item:
-            self.args["compilation_mode"] = item
 
         # Rendre le template avec le contexte
-        rendered_content = self.template.render(self.args)
+        rendered_content = template.render(self.args)
         return rendered_content
     
     def __str__(self):

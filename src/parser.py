@@ -1,7 +1,7 @@
 import os
 import xml.etree.ElementTree as ET
 from src.node import Node
-from src.jinja.template_services import get_template
+from src.jinja.template_services import get_templates
 
 # Default output file
 OUTPUT_XML_FILE = os.path.join("output","consolidated_output.xml")
@@ -22,10 +22,10 @@ def rec_xml_parser(xml_node):
         child_node = rec_xml_parser(child)
         children.append(child_node)
 
-    template_name = f"{xml_node.tag}.jinja"
-    template = get_template(template_name)
+    tag = xml_node.tag
+    templates = get_templates(tag)
 
-    return Node(tag=xml_node.tag, template=template, children=children, **xml_node.attrib)
+    return Node(tag=tag, templates=templates, children=children, **xml_node.attrib)
 
 def parse_xml_file(xml_tree_root: ET.Element, output_file=OUTPUT_XML_FILE):
     """
