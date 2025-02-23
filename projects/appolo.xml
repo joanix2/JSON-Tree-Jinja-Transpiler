@@ -2,7 +2,7 @@
     <directory name="generated-appolo-api">
         <appolo-api framwork="appolo">
             <model name="User">
-                <field name="id" type="id" />
+                <field name="id" type="id">id du user</field>
                 <field name="name" type="string" />
                 <field name="email" type="string" />
                 <field name="links" type="[Link]" />

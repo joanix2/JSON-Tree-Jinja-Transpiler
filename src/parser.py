@@ -18,7 +18,11 @@ def rec_xml_parser(xml_node):
     """
     children = [rec_xml_parser(child) for child in xml_node]
 
-    return Node(tag=xml_node.tag, children=children, **xml_node.attrib)
+    # Récupérer le contenu textuel s'il existe (en supprimant les espaces inutiles)
+    text_content = xml_node.text.strip() if xml_node.text and xml_node.text.strip() else None
+
+    return Node(tag=xml_node.tag, children=children, text=text_content, **xml_node.attrib)
+
 
 def parse_xml_file(xml_tree_root: ET.Element, output_file=OUTPUT_XML_FILE):
     """

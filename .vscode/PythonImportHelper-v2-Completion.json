@@ -209,7 +209,7 @@
         "kind": 2,
         "importPath": "src.parser",
         "description": "src.parser",
-        "peekOfCode": "def rec_xml_parser(xml_node):\n    \"\"\"\n    Recursively parses an XML node and its children, returning a Node object\n    that renders itself and its children.\n    :param xml_node: The current XML element.\n    :return: A Node object representing the current XML element and its children.\n    \"\"\"\n    children = [rec_xml_parser(child) for child in xml_node]\n    return Node(tag=xml_node.tag, children=children, **xml_node.attrib)\ndef parse_xml_file(xml_tree_root: ET.Element, output_file=OUTPUT_XML_FILE):",
+        "peekOfCode": "def rec_xml_parser(xml_node):\n    \"\"\"\n    Recursively parses an XML node and its children, returning a Node object\n    that renders itself and its children.\n    :param xml_node: The current XML element.\n    :return: A Node object representing the current XML element and its children.\n    \"\"\"\n    children = [rec_xml_parser(child) for child in xml_node]\n    # Récupérer le contenu textuel s'il existe (en supprimant les espaces inutiles)\n    text_content = xml_node.text.strip() if xml_node.text and xml_node.text.strip() else None",
         "detail": "src.parser",
         "documentation": {}
     },

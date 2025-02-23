@@ -40,7 +40,7 @@ class Node:
         Retourne une représentation en chaîne de la structure du nœud et de ses enfants.
         """
         # Format the current node's tag and attributes
-        node_str = f"Node(tag='{self.tag}', args={self.args})"
+        node_str = f"Node(tag='{self.tag}', args={self.__dict__})"
 
         # Format the children recursively
         if self.children:
