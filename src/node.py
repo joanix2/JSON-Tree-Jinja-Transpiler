@@ -12,9 +12,12 @@ class Node:
         :param args: Autres arguments passés pour le rendu du template.
         """
         self.tag = tag
+        self.children = children or []
         self.templates_names = get_templates_names(tag)
-        self.args = args
-        self.args["children"] = children if children else []
+
+        # Mapping automatique des arguments supplémentaires
+        for key, value in args.items():
+            setattr(self, key, value)
 
     def __getattr__(self, item):
         """
@@ -29,7 +32,7 @@ class Node:
             raise ValueError(f"Node '{self.tag}' cannot be compiled because it has no template.")
 
         # Rendre le template avec le contexte
-        rendered_content = get_template(self.tag, item, self.args)
+        rendered_content = get_template(self.tag, item, self.__dict__)
         return rendered_content
     
     def __str__(self):
