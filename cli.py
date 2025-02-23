@@ -15,8 +15,9 @@ def cli():
 
 @cli.command()
 @click.argument("input_file", type=click.Path(exists=True), default="main.xml")
+@click.option("--type", "-t", type=str, default="default", help="Choix du type de compilation du premier noeud")
 @click.option("--output-dir", "-o", type=click.Path(), default=INFRASTRUCTURE, help="Répertoire de sortie pour les fichiers générés.")
-def compile(input_file, output_dir):
+def compile(input_file, type, output_dir):
     """
     Traite un fichier XML et génère des fichiers à partir de templates.
 
@@ -24,6 +25,7 @@ def compile(input_file, output_dir):
         INPUT_FILE : Le fichier XML à traiter (par défaut : main.xml).
 
     Options :
+        --type, -t : Choix du type de compilation du premier noeud (par défaut : 'default').
         --output-dir, -o : Répertoire de sortie pour les fichiers générés (par défaut : 'output').
     """
     click.echo(f"Processing XML file: {input_file}")
@@ -34,7 +36,7 @@ def compile(input_file, output_dir):
     root = tree.getroot()
 
     # Appelle la fonction pour traiter le fichier XML
-    parse_xml_file(root, output_dir)
+    parse_xml_file(root, type, output_dir)
 
 @cli.command()
 @click.option("--config-file", "-c", type=click.Path(exists=True), default=INFRASTRUCTURE, help="Fichier YAML décrivant l'arborescence.")

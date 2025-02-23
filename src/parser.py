@@ -24,11 +24,12 @@ def rec_xml_parser(xml_node):
     return Node(tag=xml_node.tag, children=children, text=text_content, **xml_node.attrib)
 
 
-def parse_xml_file(xml_tree_root: ET.Element, output_file=OUTPUT_XML_FILE):
+def parse_xml_file(xml_tree_root: ET.Element, type:str, output_file=OUTPUT_XML_FILE):
     """
     Parse an XML file and consolidate all rendered content into a single XML file.
 
     :param xml_file_path: Path to the XML file to parse.
+    :param type: type de compilation du noeud root.
     :param output_file: Path to the consolidated output XML file.
     """
 
@@ -36,7 +37,7 @@ def parse_xml_file(xml_tree_root: ET.Element, output_file=OUTPUT_XML_FILE):
     root_node = rec_xml_parser(xml_tree_root)
 
     # Render the entire tree starting from the root node
-    rendered_content = root_node.default
+    rendered_content = getattr(root_node, type)
 
     # Write the rendered content to the output file
     os.makedirs(os.path.dirname(output_file), exist_ok=True)

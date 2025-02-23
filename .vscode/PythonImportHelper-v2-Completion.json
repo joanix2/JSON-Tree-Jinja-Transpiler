@@ -218,7 +218,7 @@
         "kind": 2,
         "importPath": "src.parser",
         "description": "src.parser",
-        "peekOfCode": "def parse_xml_file(xml_tree_root: ET.Element, output_file=OUTPUT_XML_FILE):\n    \"\"\"\n    Parse an XML file and consolidate all rendered content into a single XML file.\n    :param xml_file_path: Path to the XML file to parse.\n    :param output_file: Path to the consolidated output XML file.\n    \"\"\"\n    # Start the recursive parsing process\n    root_node = rec_xml_parser(xml_tree_root)\n    # Render the entire tree starting from the root node\n    rendered_content = root_node.default",
+        "peekOfCode": "def parse_xml_file(xml_tree_root: ET.Element, type:str, output_file=OUTPUT_XML_FILE):\n    \"\"\"\n    Parse an XML file and consolidate all rendered content into a single XML file.\n    :param xml_file_path: Path to the XML file to parse.\n    :param type: type de compilation du noeud root.\n    :param output_file: Path to the consolidated output XML file.\n    \"\"\"\n    # Start the recursive parsing process\n    root_node = rec_xml_parser(xml_tree_root)\n    # Render the entire tree starting from the root node",
         "detail": "src.parser",
         "documentation": {}
     },
@@ -236,7 +236,7 @@
         "kind": 2,
         "importPath": "cli",
         "description": "cli",
-        "peekOfCode": "def cli():\n    \"\"\"\n    CLI pour la gestion des templates et des projets.\n    \"\"\"\n    pass\n@cli.command()\n@click.argument(\"input_file\", type=click.Path(exists=True), default=\"main.xml\")\n@click.option(\"--output-dir\", \"-o\", type=click.Path(), default=INFRASTRUCTURE, help=\"Répertoire de sortie pour les fichiers générés.\")\ndef compile(input_file, output_dir):\n    \"\"\"",
+        "peekOfCode": "def cli():\n    \"\"\"\n    CLI pour la gestion des templates et des projets.\n    \"\"\"\n    pass\n@cli.command()\n@click.argument(\"input_file\", type=click.Path(exists=True), default=\"main.xml\")\n@click.option(\"--type\", \"-t\", type=str, default=\"default\", help=\"Choix du type de compilation du premier noeud\")\n@click.option(\"--output-dir\", \"-o\", type=click.Path(), default=INFRASTRUCTURE, help=\"Répertoire de sortie pour les fichiers générés.\")\ndef compile(input_file, type, output_dir):",
         "detail": "cli",
         "documentation": {}
     },
@@ -245,7 +245,7 @@
         "kind": 2,
         "importPath": "cli",
         "description": "cli",
-        "peekOfCode": "def compile(input_file, output_dir):\n    \"\"\"\n    Traite un fichier XML et génère des fichiers à partir de templates.\n    Arguments :\n        INPUT_FILE : Le fichier XML à traiter (par défaut : main.xml).\n    Options :\n        --output-dir, -o : Répertoire de sortie pour les fichiers générés (par défaut : 'output').\n    \"\"\"\n    click.echo(f\"Processing XML file: {input_file}\")\n    click.echo(f\"Output directory: {output_dir}\")",
+        "peekOfCode": "def compile(input_file, type, output_dir):\n    \"\"\"\n    Traite un fichier XML et génère des fichiers à partir de templates.\n    Arguments :\n        INPUT_FILE : Le fichier XML à traiter (par défaut : main.xml).\n    Options :\n        --type, -t : Choix du type de compilation du premier noeud (par défaut : 'default').\n        --output-dir, -o : Répertoire de sortie pour les fichiers générés (par défaut : 'output').\n    \"\"\"\n    click.echo(f\"Processing XML file: {input_file}\")",
         "detail": "cli",
         "documentation": {}
     },
@@ -263,7 +263,7 @@
         "kind": 5,
         "importPath": "cli",
         "description": "cli",
-        "peekOfCode": "INFRASTRUCTURE = os.path.join(\"output\",\"infrastructure.yml\")\n@click.group()\ndef cli():\n    \"\"\"\n    CLI pour la gestion des templates et des projets.\n    \"\"\"\n    pass\n@cli.command()\n@click.argument(\"input_file\", type=click.Path(exists=True), default=\"main.xml\")\n@click.option(\"--output-dir\", \"-o\", type=click.Path(), default=INFRASTRUCTURE, help=\"Répertoire de sortie pour les fichiers générés.\")",
+        "peekOfCode": "INFRASTRUCTURE = os.path.join(\"output\",\"infrastructure.yml\")\n@click.group()\ndef cli():\n    \"\"\"\n    CLI pour la gestion des templates et des projets.\n    \"\"\"\n    pass\n@cli.command()\n@click.argument(\"input_file\", type=click.Path(exists=True), default=\"main.xml\")\n@click.option(\"--type\", \"-t\", type=str, default=\"default\", help=\"Choix du type de compilation du premier noeud\")",
         "detail": "cli",
         "documentation": {}
     }

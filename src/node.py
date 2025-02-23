@@ -29,7 +29,7 @@ class Node:
 
         # Vérifie si le nœud a un template
         if not (item in self.templates_names):
-            raise ValueError(f"Node '{self.tag}' cannot be compiled because it has no template.")
+            raise ValueError(f"Node '{self.tag}' cannot be compiled because it has no template '{item}'.")
 
         # Rendre le template avec le contexte
         rendered_content = get_template(self.tag, item, self.__dict__)

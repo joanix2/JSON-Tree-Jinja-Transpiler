@@ -1,0 +1,6 @@
+project_name: my_project
+output_dir: generated
+structure:
+{% for child in children %}
+{{ child.default | indent(2, true) }}
+{% endfor %}
