@@ -1,2 +1,2 @@
 {%- import 'type.jinja' as type_macros -%}
-{{ name }} {{ type_macros.convert_type(type, 'prisma') }}{%- if type == "id"%} @id{%- endif -%}{% if unique is defined and unique %} @unique{%- endif -%}{% if default is defined %} @default({{default}}){%- endif -%}
+{{ name }} {{ type_macros.convert_type(type, 'prisma') }}{%- if type == "id"%} @id{%- endif -%}{% if unique is defined and unique %} @unique{%- endif -%}{% if value is defined and value is not none %} @default({{value}}){%- endif -%}

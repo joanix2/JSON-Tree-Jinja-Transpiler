@@ -13,7 +13,6 @@ os.makedirs(MACROS_DIR, exist_ok=True)
 # Création de l'environnement Jinja2
 env = Environment(
     loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),
-    autoescape=True,  # Active l'échappement automatique (utile pour HTML)
     undefined=StrictUndefined  # Lève une erreur si une variable est manquante
 )
 

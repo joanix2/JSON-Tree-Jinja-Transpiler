@@ -2,16 +2,18 @@
     <directory name="generated-appolo-api">
         <appolo-api framwork="appolo">
             <model name="User">
-                <field name="id" type="id" default= "autoincrement()">1 + 1</field>
+                <field name="id" type="id">autoincrement()</field>
                 <field name="name" type="string" />
-                <field name="email" type="string" unique="false"/>
+                <field name="email" type="string" unique="true"/>
+                <field name="password" type="string" />
                 <field name="links" type="List[Link]" />
             </model>
             <model name="Link">
-                <field name="id" type="id" default= "autoincrement()"/>
+                <field name="id" type="id">autoincrement()</field>
+                <field name="createdAt" type="DateTime" >now()</field>
                 <field name="description" type="string" />
                 <field name="url" type="string" />
-                <field name="postedBy" type="User" default= "now()"/>
+                <field name="postedBy" type="User"/>
             </model>
         </appolo-api>
     </directory>

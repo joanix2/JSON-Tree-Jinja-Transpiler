@@ -163,7 +163,7 @@
         "kind": 5,
         "importPath": "src.jinja.template_services",
         "description": "src.jinja.template_services",
-        "peekOfCode": "BASE_DIR = os.path.dirname(__file__)\nTEMPLATES_DIR = os.path.join(BASE_DIR, \"templates\")\nMACROS_DIR = os.path.join(BASE_DIR, \"macros\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATES_DIR, exist_ok=True)\nos.makedirs(MACROS_DIR, exist_ok=True)\n# Création de l'environnement Jinja2\nenv = Environment(\n    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),\n    autoescape=True,  # Active l'échappement automatique (utile pour HTML)",
+        "peekOfCode": "BASE_DIR = os.path.dirname(__file__)\nTEMPLATES_DIR = os.path.join(BASE_DIR, \"templates\")\nMACROS_DIR = os.path.join(BASE_DIR, \"macros\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATES_DIR, exist_ok=True)\nos.makedirs(MACROS_DIR, exist_ok=True)\n# Création de l'environnement Jinja2\nenv = Environment(\n    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),\n    undefined=StrictUndefined  # Lève une erreur si une variable est manquante",
         "detail": "src.jinja.template_services",
         "documentation": {}
     },
@@ -172,7 +172,7 @@
         "kind": 5,
         "importPath": "src.jinja.template_services",
         "description": "src.jinja.template_services",
-        "peekOfCode": "TEMPLATES_DIR = os.path.join(BASE_DIR, \"templates\")\nMACROS_DIR = os.path.join(BASE_DIR, \"macros\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATES_DIR, exist_ok=True)\nos.makedirs(MACROS_DIR, exist_ok=True)\n# Création de l'environnement Jinja2\nenv = Environment(\n    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),\n    autoescape=True,  # Active l'échappement automatique (utile pour HTML)\n    undefined=StrictUndefined  # Lève une erreur si une variable est manquante",
+        "peekOfCode": "TEMPLATES_DIR = os.path.join(BASE_DIR, \"templates\")\nMACROS_DIR = os.path.join(BASE_DIR, \"macros\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATES_DIR, exist_ok=True)\nos.makedirs(MACROS_DIR, exist_ok=True)\n# Création de l'environnement Jinja2\nenv = Environment(\n    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),\n    undefined=StrictUndefined  # Lève une erreur si une variable est manquante\n)",
         "detail": "src.jinja.template_services",
         "documentation": {}
     },
@@ -181,7 +181,7 @@
         "kind": 5,
         "importPath": "src.jinja.template_services",
         "description": "src.jinja.template_services",
-        "peekOfCode": "MACROS_DIR = os.path.join(BASE_DIR, \"macros\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATES_DIR, exist_ok=True)\nos.makedirs(MACROS_DIR, exist_ok=True)\n# Création de l'environnement Jinja2\nenv = Environment(\n    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),\n    autoescape=True,  # Active l'échappement automatique (utile pour HTML)\n    undefined=StrictUndefined  # Lève une erreur si une variable est manquante\n)",
+        "peekOfCode": "MACROS_DIR = os.path.join(BASE_DIR, \"macros\")\n# Ensure the templates directory exists\nos.makedirs(TEMPLATES_DIR, exist_ok=True)\nos.makedirs(MACROS_DIR, exist_ok=True)\n# Création de l'environnement Jinja2\nenv = Environment(\n    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),\n    undefined=StrictUndefined  # Lève une erreur si une variable est manquante\n)\ndef get_templates_names(template_folder: str) -> set[str]:",
         "detail": "src.jinja.template_services",
         "documentation": {}
     },
@@ -190,7 +190,7 @@
         "kind": 5,
         "importPath": "src.jinja.template_services",
         "description": "src.jinja.template_services",
-        "peekOfCode": "env = Environment(\n    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),\n    autoescape=True,  # Active l'échappement automatique (utile pour HTML)\n    undefined=StrictUndefined  # Lève une erreur si une variable est manquante\n)\ndef get_templates_names(template_folder: str) -> set[str]:\n    \"\"\"\n    Retourne un ensemble contenant les noms des fichiers templates (sans l'extension .jinja).\n    \"\"\"\n    folder_path = os.path.join(TEMPLATES_DIR, template_folder)",
+        "peekOfCode": "env = Environment(\n    loader=FileSystemLoader([TEMPLATES_DIR, MACROS_DIR]),\n    undefined=StrictUndefined  # Lève une erreur si une variable est manquante\n)\ndef get_templates_names(template_folder: str) -> set[str]:\n    \"\"\"\n    Retourne un ensemble contenant les noms des fichiers templates (sans l'extension .jinja).\n    \"\"\"\n    folder_path = os.path.join(TEMPLATES_DIR, template_folder)\n    if not os.path.exists(folder_path):",
         "detail": "src.jinja.template_services",
         "documentation": {}
     },

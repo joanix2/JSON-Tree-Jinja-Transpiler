@@ -23,10 +23,9 @@
                                     "tag": "field",
                                     "attributes": {
                                         "name": "id",
-                                        "type": "id",
-                                        "default": "autoincrement()"
+                                        "type": "id"
                                     },
-                                    "value": "1 + 1"
+                                    "value": "autoincrement()"
                                 },
                                 {
                                     "tag": "field",
@@ -40,7 +39,14 @@
                                     "attributes": {
                                         "name": "email",
                                         "type": "string",
-                                        "unique": false
+                                        "unique": true
+                                    }
+                                },
+                                {
+                                    "tag": "field",
+                                    "attributes": {
+                                        "name": "password",
+                                        "type": "string"
                                     }
                                 },
                                 {
@@ -62,9 +68,17 @@
                                     "tag": "field",
                                     "attributes": {
                                         "name": "id",
-                                        "type": "id",
-                                        "default": "autoincrement()"
-                                    }
+                                        "type": "id"
+                                    },
+                                    "value": "autoincrement()"
+                                },
+                                {
+                                    "tag": "field",
+                                    "attributes": {
+                                        "name": "createdAt",
+                                        "type": "DateTime"
+                                    },
+                                    "value": "now()"
                                 },
                                 {
                                     "tag": "field",
@@ -84,8 +98,7 @@
                                     "tag": "field",
                                     "attributes": {
                                         "name": "postedBy",
-                                        "type": "User",
-                                        "default": "now()"
+                                        "type": "User"
                                     }
                                 }
                             ]
