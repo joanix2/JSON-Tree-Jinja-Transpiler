@@ -4,6 +4,7 @@ import click
 from src.converter import xml_to_dict
 from src.parser import parse_json_file
 from src.build import build_infrastructure
+from src.watcher import start_watching
 import xml.etree.ElementTree as ET
 
 INFRASTRUCTURE = os.path.join("output","infrastructure.yml")
@@ -135,7 +136,17 @@ def run(input_file, type, output):
 
     click.echo("✅ Exécution complète ! 🚀")
 
+@cli.command()
+@click.argument("target_file", type=click.Path(exists=True), default="main.xml")
+def start(target_file):
+    """
+    Démarre l'observateur qui surveille les fichiers et recompile automatiquement.
 
+    Arguments :
+        target_file : Le fichier XML ou JSON à traiter.
+    """
+    click.echo(f"👀 Surveillance activée sur : {target_file} et le dossier templates/\n")
+    start_watching(target_file)
 
 if __name__ == "__main__":
     cli()

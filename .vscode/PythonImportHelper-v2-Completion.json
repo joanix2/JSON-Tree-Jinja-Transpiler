@@ -108,6 +108,40 @@
         "documentation": {}
     },
     {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "Observer",
+        "importPath": "watchdog.observers",
+        "description": "watchdog.observers",
+        "isExtraImport": true,
+        "detail": "watchdog.observers",
+        "documentation": {}
+    },
+    {
+        "label": "FileSystemEventHandler",
+        "importPath": "watchdog.events",
+        "description": "watchdog.events",
+        "isExtraImport": true,
+        "detail": "watchdog.events",
+        "documentation": {}
+    },
+    {
         "label": "click",
         "kind": 6,
         "isExtraImport": true,
@@ -138,6 +172,14 @@
         "description": "src.build",
         "isExtraImport": true,
         "detail": "src.build",
+        "documentation": {}
+    },
+    {
+        "label": "start_watching",
+        "importPath": "src.watcher",
+        "description": "src.watcher",
+        "isExtraImport": true,
+        "detail": "src.watcher",
         "documentation": {}
     },
     {
@@ -276,6 +318,33 @@
         "documentation": {}
     },
     {
+        "label": "FileChangeHandler",
+        "kind": 6,
+        "importPath": "src.watcher",
+        "description": "src.watcher",
+        "peekOfCode": "class FileChangeHandler(FileSystemEventHandler):\n    def __init__(self, input_file):\n        super().__init__()\n        self.input_file = input_file\n    def on_modified(self, event):\n        \"\"\"\n        Détecte les modifications dans les fichiers et relance la commande `run`.\n        \"\"\"\n        if any(event.src_path.endswith(ext) for ext in [\".xml\", \".json\", \".jinja\"]):\n            print(f\"\\n🔄 Fichier modifié : {event.src_path}\")",
+        "detail": "src.watcher",
+        "documentation": {}
+    },
+    {
+        "label": "start_watching",
+        "kind": 2,
+        "importPath": "src.watcher",
+        "description": "src.watcher",
+        "peekOfCode": "def start_watching(input_file):\n    \"\"\"\n    Démarre l'observateur pour surveiller les fichiers et dossiers.\n    \"\"\"\n    observer = Observer()\n    event_handler = FileChangeHandler(input_file)\n    watched_dirs = WATCHED_DIRS + [input_file]\n    for path in watched_dirs:\n        observer.schedule(event_handler, path, recursive=True)\n    print(\"👀 Surveillance des fichiers en cours... (CTRL+C pour arrêter)\\n\")",
+        "detail": "src.watcher",
+        "documentation": {}
+    },
+    {
+        "label": "WATCHED_DIRS",
+        "kind": 5,
+        "importPath": "src.watcher",
+        "description": "src.watcher",
+        "peekOfCode": "WATCHED_DIRS = [os.path.join(\"src\",\"jinja\",\"templates\")]\nclass FileChangeHandler(FileSystemEventHandler):\n    def __init__(self, input_file):\n        super().__init__()\n        self.input_file = input_file\n    def on_modified(self, event):\n        \"\"\"\n        Détecte les modifications dans les fichiers et relance la commande `run`.\n        \"\"\"\n        if any(event.src_path.endswith(ext) for ext in [\".xml\", \".json\", \".jinja\"]):",
+        "detail": "src.watcher",
+        "documentation": {}
+    },
+    {
         "label": "cli",
         "kind": 2,
         "importPath": "cli",
@@ -317,6 +386,15 @@
         "importPath": "cli",
         "description": "cli",
         "peekOfCode": "def run(input_file, type, output):\n    \"\"\"\n    Exécute toutes les étapes :\n    1. Vérifie si le fichier est XML ou JSON.\n    2. Convertit le fichier XML en JSON si nécessaire.\n    3. Parse le JSON.\n    4. Si le parsing réussit, génère une arborescence YAML.\n    Arguments :\n        INPUT_FILE : Le fichier XML ou JSON à traiter.\n    Options :",
+        "detail": "cli",
+        "documentation": {}
+    },
+    {
+        "label": "start",
+        "kind": 2,
+        "importPath": "cli",
+        "description": "cli",
+        "peekOfCode": "def start(target_file):\n    \"\"\"\n    Démarre l'observateur qui surveille les fichiers et recompile automatiquement.\n    Arguments :\n        target_file : Le fichier XML ou JSON à traiter.\n    \"\"\"\n    click.echo(f\"👀 Surveillance activée sur : {target_file} et le dossier templates/\\n\")\n    start_watching(target_file)\nif __name__ == \"__main__\":\n    cli()",
         "detail": "cli",
         "documentation": {}
     },
