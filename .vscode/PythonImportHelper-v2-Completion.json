@@ -50,6 +50,24 @@
         "documentation": {}
     },
     {
+        "label": "xml.etree.ElementTree",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "xml.etree.ElementTree",
+        "description": "xml.etree.ElementTree",
+        "detail": "xml.etree.ElementTree",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
         "label": "List",
         "importPath": "typing",
         "description": "typing",
@@ -82,15 +100,6 @@
         "documentation": {}
     },
     {
-        "label": "xml.etree.ElementTree",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "xml.etree.ElementTree",
-        "description": "xml.etree.ElementTree",
-        "detail": "xml.etree.ElementTree",
-        "documentation": {}
-    },
-    {
         "label": "Node",
         "importPath": "src.node",
         "description": "src.node",
@@ -108,7 +117,15 @@
         "documentation": {}
     },
     {
-        "label": "parse_xml_file",
+        "label": "xml_to_dict",
+        "importPath": "src.converter",
+        "description": "src.converter",
+        "isExtraImport": true,
+        "detail": "src.converter",
+        "documentation": {}
+    },
+    {
+        "label": "parse_json_file",
         "importPath": "src.parser",
         "description": "src.parser",
         "isExtraImport": true,
@@ -196,6 +213,24 @@
         "documentation": {}
     },
     {
+        "label": "xml_to_dict",
+        "kind": 2,
+        "importPath": "src.converter",
+        "description": "src.converter",
+        "peekOfCode": "def xml_to_dict(element):\n    \"\"\"Convertit un élément XML en un dictionnaire JSON structuré.\"\"\"\n    node = {\"tag\": element.tag}\n    # Ajoute les attributs s'ils existent\n    if element.attrib:\n        node[\"attributes\"] = element.attrib\n    # Ajoute les enfants récursivement\n    children = [xml_to_dict(child) for child in element]\n    if children:\n        node[\"children\"] = children",
+        "detail": "src.converter",
+        "documentation": {}
+    },
+    {
+        "label": "convert_xml_to_json",
+        "kind": 2,
+        "importPath": "src.converter",
+        "description": "src.converter",
+        "peekOfCode": "def convert_xml_to_json(xml_file, json_file):\n    \"\"\"Convertit un fichier XML en fichier JSON.\"\"\"\n    tree = ET.parse(xml_file)\n    root = tree.getroot()\n    json_data = xml_to_dict(root)\n    with open(json_file, \"w\", encoding=\"utf-8\") as f:\n        json.dump(json_data, f, indent=4, ensure_ascii=False)\n    print(f\"Conversion terminée. Résultat enregistré dans {json_file}\")",
+        "detail": "src.converter",
+        "documentation": {}
+    },
+    {
         "label": "Node",
         "kind": 6,
         "importPath": "src.node",
@@ -205,29 +240,29 @@
         "documentation": {}
     },
     {
-        "label": "rec_xml_parser",
+        "label": "rec_json_parser",
         "kind": 2,
         "importPath": "src.parser",
         "description": "src.parser",
-        "peekOfCode": "def rec_xml_parser(xml_node):\n    \"\"\"\n    Recursively parses an XML node and its children, returning a Node object\n    that renders itself and its children.\n    :param xml_node: The current XML element.\n    :return: A Node object representing the current XML element and its children.\n    \"\"\"\n    children = [rec_xml_parser(child) for child in xml_node]\n    # Récupérer le contenu textuel s'il existe (en supprimant les espaces inutiles)\n    text_content = xml_node.text.strip() if xml_node.text and xml_node.text.strip() else None",
+        "peekOfCode": "def rec_json_parser(json_node):\n    \"\"\"\n    Analyse récursivement un nœud JSON et ses enfants, retournant un objet Node\n    qui se rend lui-même et ses enfants.\n    :param json_node: Le nœud JSON actuel sous forme de dictionnaire.\n    :return: Un objet Node représentant l'élément JSON et ses enfants.\n    \"\"\"\n    # Récupérer le tag du nœud\n    tag = json_node.get(\"tag\", \"unknown\")\n    # Récupérer les enfants s'ils existent",
         "detail": "src.parser",
         "documentation": {}
     },
     {
-        "label": "parse_xml_file",
+        "label": "parse_json_file",
         "kind": 2,
         "importPath": "src.parser",
         "description": "src.parser",
-        "peekOfCode": "def parse_xml_file(xml_tree_root: ET.Element, type:str, output_file=OUTPUT_XML_FILE):\n    \"\"\"\n    Parse an XML file and consolidate all rendered content into a single XML file.\n    :param xml_file_path: Path to the XML file to parse.\n    :param type: type de compilation du noeud root.\n    :param output_file: Path to the consolidated output XML file.\n    \"\"\"\n    # Start the recursive parsing process\n    root_node = rec_xml_parser(xml_tree_root)\n    # Render the entire tree starting from the root node",
+        "peekOfCode": "def parse_json_file(json_tree_root, type, output_file=INFRASTRUCTURE):\n    \"\"\"\n    Parse un fichier JSON et consolide tout le contenu rendu dans un seul fichier JSON.\n    :param json_tree_root: Dictionnaire JSON représentant la racine du fichier JSON.\n    :param type: Type de compilation du nœud root.\n    :param output_file: Fichier de sortie YAML.\n    \"\"\"\n    # Démarrer le processus de parsing récursif\n    root_node = rec_json_parser(json_tree_root)\n    # Rendre l'arbre entier à partir du nœud racine",
         "detail": "src.parser",
         "documentation": {}
     },
     {
-        "label": "OUTPUT_XML_FILE",
+        "label": "INFRASTRUCTURE",
         "kind": 5,
         "importPath": "src.parser",
         "description": "src.parser",
-        "peekOfCode": "OUTPUT_XML_FILE = os.path.join(\"output\",\"consolidated_output.xml\")\n# Ensure the output directory exists\nos.makedirs(os.path.dirname(OUTPUT_XML_FILE), exist_ok=True)\ndef rec_xml_parser(xml_node):\n    \"\"\"\n    Recursively parses an XML node and its children, returning a Node object\n    that renders itself and its children.\n    :param xml_node: The current XML element.\n    :return: A Node object representing the current XML element and its children.\n    \"\"\"",
+        "peekOfCode": "INFRASTRUCTURE = os.path.join(\"output\",\"infrastructure.yml\")\n# S'assurer que le répertoire de sortie existe\nos.makedirs(os.path.dirname(INFRASTRUCTURE), exist_ok=True)\ndef rec_json_parser(json_node):\n    \"\"\"\n    Analyse récursivement un nœud JSON et ses enfants, retournant un objet Node\n    qui se rend lui-même et ses enfants.\n    :param json_node: Le nœud JSON actuel sous forme de dictionnaire.\n    :return: Un objet Node représentant l'élément JSON et ses enfants.\n    \"\"\"",
         "detail": "src.parser",
         "documentation": {}
     },
@@ -236,7 +271,16 @@
         "kind": 2,
         "importPath": "cli",
         "description": "cli",
-        "peekOfCode": "def cli():\n    \"\"\"\n    CLI pour la gestion des templates et des projets.\n    \"\"\"\n    pass\n@cli.command()\n@click.argument(\"input_file\", type=click.Path(exists=True), default=\"main.xml\")\n@click.option(\"--type\", \"-t\", type=str, default=\"default\", help=\"Choix du type de compilation du premier noeud\")\n@click.option(\"--output-dir\", \"-o\", type=click.Path(), default=INFRASTRUCTURE, help=\"Répertoire de sortie pour les fichiers générés.\")\ndef compile(input_file, type, output_dir):",
+        "peekOfCode": "def cli():\n    \"\"\"\n    CLI pour la gestion des templates et des projets.\n    \"\"\"\n    pass\n@cli.command()\n@click.argument(\"xml_file\", type=click.Path(exists=True), required=True)\n@click.option(\"--json-file\", \"-j\", type=click.Path(), default=None, help=\"Fichier JSON de sortie. Par défaut, même nom que le fichier XML avec extension .json.\")\ndef convert(xml_file, json_file):\n    \"\"\"",
+        "detail": "cli",
+        "documentation": {}
+    },
+    {
+        "label": "convert",
+        "kind": 2,
+        "importPath": "cli",
+        "description": "cli",
+        "peekOfCode": "def convert(xml_file, json_file):\n    \"\"\"\n    Convertit un fichier XML en JSON.\n    Options :\n        xml_file : Fichier XML source.\n        --json-file, -j : Fichier JSON de sortie (facultatif).\n                         Par défaut, le JSON aura le même nom et se trouvera dans le même répertoire que le fichier XML.\n    \"\"\"\n    # Déterminer le fichier JSON de sortie par défaut s'il n'est pas fourni\n    if json_file is None:",
         "detail": "cli",
         "documentation": {}
     },
@@ -245,7 +289,7 @@
         "kind": 2,
         "importPath": "cli",
         "description": "cli",
-        "peekOfCode": "def compile(input_file, type, output_dir):\n    \"\"\"\n    Traite un fichier XML et génère des fichiers à partir de templates.\n    Arguments :\n        INPUT_FILE : Le fichier XML à traiter (par défaut : main.xml).\n    Options :\n        --type, -t : Choix du type de compilation du premier noeud (par défaut : 'default').\n        --output-dir, -o : Répertoire de sortie pour les fichiers générés (par défaut : 'output').\n    \"\"\"\n    click.echo(f\"Processing XML file: {input_file}\")",
+        "peekOfCode": "def compile(input_file, type, output):\n    \"\"\"\n    Traite un fichier JSON et génère des fichiers à partir de templates.\n    Arguments :\n        INPUT_FILE : Le fichier JSON à traiter (par défaut : main.json).\n    Options :\n        --type, -t : Choix du type de compilation du premier nœud (par défaut : 'default').\n        --output-dir, -o : Répertoire de sortie pour les fichiers générés (par défaut : 'output').\n    \"\"\"\n    click.echo(f\"Processing JSON file: {input_file}\")",
         "detail": "cli",
         "documentation": {}
     },
@@ -263,7 +307,7 @@
         "kind": 5,
         "importPath": "cli",
         "description": "cli",
-        "peekOfCode": "INFRASTRUCTURE = os.path.join(\"output\",\"infrastructure.yml\")\n@click.group()\ndef cli():\n    \"\"\"\n    CLI pour la gestion des templates et des projets.\n    \"\"\"\n    pass\n@cli.command()\n@click.argument(\"input_file\", type=click.Path(exists=True), default=\"main.xml\")\n@click.option(\"--type\", \"-t\", type=str, default=\"default\", help=\"Choix du type de compilation du premier noeud\")",
+        "peekOfCode": "INFRASTRUCTURE = os.path.join(\"output\",\"infrastructure.yml\")\n@click.group()\ndef cli():\n    \"\"\"\n    CLI pour la gestion des templates et des projets.\n    \"\"\"\n    pass\n@cli.command()\n@click.argument(\"xml_file\", type=click.Path(exists=True), required=True)\n@click.option(\"--json-file\", \"-j\", type=click.Path(), default=None, help=\"Fichier JSON de sortie. Par défaut, même nom que le fichier XML avec extension .json.\")",
         "detail": "cli",
         "documentation": {}
     }

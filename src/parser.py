@@ -1,42 +1,48 @@
 import os
-import xml.etree.ElementTree as ET
+import json
 from src.node import Node
 
-# Default output file
-OUTPUT_XML_FILE = os.path.join("output","consolidated_output.xml")
+# Fichier de sortie par défaut
+INFRASTRUCTURE = os.path.join("output","infrastructure.yml")
 
-# Ensure the output directory exists
-os.makedirs(os.path.dirname(OUTPUT_XML_FILE), exist_ok=True)
+# S'assurer que le répertoire de sortie existe
+os.makedirs(os.path.dirname(INFRASTRUCTURE), exist_ok=True)
 
-def rec_xml_parser(xml_node):
+def rec_json_parser(json_node):
     """
-    Recursively parses an XML node and its children, returning a Node object
-    that renders itself and its children.
+    Analyse récursivement un nœud JSON et ses enfants, retournant un objet Node
+    qui se rend lui-même et ses enfants.
 
-    :param xml_node: The current XML element.
-    :return: A Node object representing the current XML element and its children.
+    :param json_node: Le nœud JSON actuel sous forme de dictionnaire.
+    :return: Un objet Node représentant l'élément JSON et ses enfants.
     """
-    children = [rec_xml_parser(child) for child in xml_node]
+    # Récupérer le tag du nœud
+    tag = json_node.get("tag", "unknown")
 
-    # Récupérer le contenu textuel s'il existe (en supprimant les espaces inutiles)
-    text_content = xml_node.text.strip() if xml_node.text and xml_node.text.strip() else None
+    # Récupérer les enfants s'ils existent
+    children = [rec_json_parser(child) for child in json_node.get("children", [])]
 
-    return Node(tag=xml_node.tag, children=children, text=text_content, **xml_node.attrib)
+    # Récupérer le contenu textuel s'il existe
+    value = json_node.get("value")
 
+    # Récupérer les attributs (tous sauf "tag", "children" et "value")
+    attributes = json_node.get("attributes", {})
 
-def parse_xml_file(xml_tree_root: ET.Element, type:str, output_file=OUTPUT_XML_FILE):
+    return Node(tag=tag, children=children, value=value, **attributes)
+
+def parse_json_file(json_tree_root, type, output_file=INFRASTRUCTURE):
     """
-    Parse an XML file and consolidate all rendered content into a single XML file.
+    Parse un fichier JSON et consolide tout le contenu rendu dans un seul fichier JSON.
 
-    :param xml_file_path: Path to the XML file to parse.
-    :param type: type de compilation du noeud root.
-    :param output_file: Path to the consolidated output XML file.
+    :param json_tree_root: Dictionnaire JSON représentant la racine du fichier JSON.
+    :param type: Type de compilation du nœud root.
+    :param output_file: Fichier de sortie YAML.
     """
 
-    # Start the recursive parsing process
-    root_node = rec_xml_parser(xml_tree_root)
+    # Démarrer le processus de parsing récursif
+    root_node = rec_json_parser(json_tree_root)
 
-    # Render the entire tree starting from the root node
+    # Rendre l'arbre entier à partir du nœud racine
     rendered_content = getattr(root_node, type)
 
     # Write the rendered content to the output file
@@ -44,4 +50,4 @@ def parse_xml_file(xml_tree_root: ET.Element, type:str, output_file=OUTPUT_XML_F
     with open(output_file, "w", encoding="utf-8") as f:
         f.write(rendered_content)
 
-    print(f"Consolidated XML file generated at: {output_file}")
+    print(f"File generated at: {output_file}")

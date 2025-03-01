@@ -1,0 +1,98 @@
+{
+  "tag": "project",
+  "children": [
+    {
+      "tag": "directory",
+      "attributes": {
+        "name": "generated-appolo-api"
+      },
+      "children": [
+        {
+          "tag": "appolo-api",
+          "attributes": {
+            "framwork": "appolo"
+          },
+          "children": [
+            {
+              "tag": "model",
+              "attributes": {
+                "name": "User"
+              },
+              "children": [
+                {
+                  "tag": "field",
+                  "attributes": {
+                    "name": "id",
+                    "type": "id",
+                    "default": "autoincrement()"
+                  },
+                  "value": "1 + 1"
+                },
+                {
+                  "tag": "field",
+                  "attributes": {
+                    "name": "name",
+                    "type": "string"
+                  }
+                },
+                {
+                  "tag": "field",
+                  "attributes": {
+                    "name": "email",
+                    "type": "string",
+                    "unique": "false"
+                  }
+                },
+                {
+                  "tag": "field",
+                  "attributes": {
+                    "name": "links",
+                    "type": "List[Link]"
+                  }
+                }
+              ]
+            },
+            {
+              "tag": "model",
+              "attributes": {
+                "name": "Link"
+              },
+              "children": [
+                {
+                  "tag": "field",
+                  "attributes": {
+                    "name": "id",
+                    "type": "id",
+                    "default": "autoincrement()"
+                  }
+                },
+                {
+                  "tag": "field",
+                  "attributes": {
+                    "name": "description",
+                    "type": "string"
+                  }
+                },
+                {
+                  "tag": "field",
+                  "attributes": {
+                    "name": "url",
+                    "type": "string"
+                  }
+                },
+                {
+                  "tag": "field",
+                  "attributes": {
+                    "name": "postedBy",
+                    "type": "User",
+                    "default": "now()"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
