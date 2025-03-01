@@ -307,7 +307,16 @@
         "kind": 2,
         "importPath": "cli",
         "description": "cli",
-        "peekOfCode": "def build(config_file):\n    \"\"\"\n    Génère une arborescence de projet à partir d'un fichier YAML.\n    Options :\n        --config-file, -c : Fichier YAML décrivant la structure du projet (par défaut : 'infrastructure.yml').\n    \"\"\"\n    click.echo(f\"Loading configuration from: {config_file}\")\n    build_infrastructure(config_file)\nif __name__ == \"__main__\":\n    cli()",
+        "peekOfCode": "def build(config_file):\n    \"\"\"\n    Génère une arborescence de projet à partir d'un fichier YAML.\n    Options :\n        --config-file, -c : Fichier YAML décrivant la structure du projet (par défaut : 'infrastructure.yml').\n    \"\"\"\n    click.echo(f\"Loading configuration from: {config_file}\")\n    build_infrastructure(config_file)\n@cli.command()\n@click.argument(\"input_file\", type=click.Path(exists=True), default=\"main.xml\")",
+        "detail": "cli",
+        "documentation": {}
+    },
+    {
+        "label": "run",
+        "kind": 2,
+        "importPath": "cli",
+        "description": "cli",
+        "peekOfCode": "def run(input_file, type, output):\n    \"\"\"\n    Exécute toutes les étapes :\n    1. Vérifie si le fichier est XML ou JSON.\n    2. Convertit le fichier XML en JSON si nécessaire.\n    3. Parse le JSON.\n    4. Si le parsing réussit, génère une arborescence YAML.\n    Arguments :\n        INPUT_FILE : Le fichier XML ou JSON à traiter.\n    Options :",
         "detail": "cli",
         "documentation": {}
     },

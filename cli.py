@@ -80,6 +80,62 @@ def build(config_file):
     click.echo(f"Loading configuration from: {config_file}")
     build_infrastructure(config_file)
 
+@cli.command()
+@click.argument("input_file", type=click.Path(exists=True), default="main.xml")
+@click.option("--type", "-t", type=str, default="default", help="Choix du type de compilation du premier nœud.")
+@click.option("--output", "-o", type=click.Path(), default=INFRASTRUCTURE, help="Répertoire de sortie pour les fichiers générés.")
+def run(input_file, type, output):
+    """
+    Exécute toutes les étapes :
+    1. Vérifie si le fichier est XML ou JSON.
+    2. Convertit le fichier XML en JSON si nécessaire.
+    3. Parse le JSON.
+    4. Si le parsing réussit, génère une arborescence YAML.
+
+    Arguments :
+        INPUT_FILE : Le fichier XML ou JSON à traiter.
+
+    Options :
+        --type, -t : Choix du type de compilation du premier nœud.
+        --output, -o : Répertoire de sortie pour les fichiers générés.
+    """
+    
+    file_ext = os.path.splitext(input_file)[1].lower()
+
+    if file_ext not in [".xml", ".json"]:
+        click.echo("❌ Erreur : Le fichier d'entrée doit être au format XML ou JSON.", err=True)
+        return
+
+    json_file = input_file  # Par défaut, c'est le JSON s'il est déjà en JSON
+
+    if file_ext == ".xml":
+        # Convertir XML en JSON
+        json_file = os.path.splitext(input_file)[0] + ".json"
+        click.echo(f"🔄 Conversion de {input_file} en JSON...")
+        
+        tree = ET.parse(input_file)
+        root = tree.getroot()
+        json_data = xml_to_dict(root)
+
+        with open(json_file, "w", encoding="utf-8") as f:
+            json.dump(json_data, f, indent=4, ensure_ascii=False)
+
+        click.echo(f"✅ Conversion terminée : {json_file}")
+
+    # Charger et parser le fichier JSON
+    click.echo(f"🔍 Parsing du fichier JSON : {json_file}")
+    with open(json_file, "r", encoding="utf-8") as f:
+        json_data = json.load(f)
+
+    parse_json_file(json_data, type, output)
+
+    # Génération de l'arborescence à partir du YAML
+    click.echo(f"🛠️ Génération de l'arborescence depuis {output}")
+    build_infrastructure(output)
+
+    click.echo("✅ Exécution complète ! 🚀")
+
+
 
 if __name__ == "__main__":
     cli()
