@@ -1,13 +1,20 @@
 import xml.etree.ElementTree as ET
 import json
 
+def safe_convert_json(value):
+    """Tente de convertir une chaîne en JSON natif."""
+    try:
+        return json.loads(value)
+    except (json.JSONDecodeError, TypeError):
+        return value
+
 def xml_to_dict(element):
     """Convertit un élément XML en un dictionnaire JSON structuré."""
     node = {"tag": element.tag}
     
     # Ajoute les attributs s'ils existent
     if element.attrib:
-        node["attributes"] = element.attrib
+        node["attributes"] = {k : safe_convert_json(v) for k, v in element.attrib.items()}
 
     # Ajoute les enfants récursivement
     children = [xml_to_dict(child) for child in element]

@@ -213,11 +213,20 @@
         "documentation": {}
     },
     {
+        "label": "safe_convert_json",
+        "kind": 2,
+        "importPath": "src.converter",
+        "description": "src.converter",
+        "peekOfCode": "def safe_convert_json(value):\n    \"\"\"Tente de convertir une chaîne en JSON natif.\"\"\"\n    try:\n        return json.loads(value)\n    except (json.JSONDecodeError, TypeError):\n        return value\ndef xml_to_dict(element):\n    \"\"\"Convertit un élément XML en un dictionnaire JSON structuré.\"\"\"\n    node = {\"tag\": element.tag}\n    # Ajoute les attributs s'ils existent",
+        "detail": "src.converter",
+        "documentation": {}
+    },
+    {
         "label": "xml_to_dict",
         "kind": 2,
         "importPath": "src.converter",
         "description": "src.converter",
-        "peekOfCode": "def xml_to_dict(element):\n    \"\"\"Convertit un élément XML en un dictionnaire JSON structuré.\"\"\"\n    node = {\"tag\": element.tag}\n    # Ajoute les attributs s'ils existent\n    if element.attrib:\n        node[\"attributes\"] = element.attrib\n    # Ajoute les enfants récursivement\n    children = [xml_to_dict(child) for child in element]\n    if children:\n        node[\"children\"] = children",
+        "peekOfCode": "def xml_to_dict(element):\n    \"\"\"Convertit un élément XML en un dictionnaire JSON structuré.\"\"\"\n    node = {\"tag\": element.tag}\n    # Ajoute les attributs s'ils existent\n    if element.attrib:\n        node[\"attributes\"] = {k : safe_convert_json(v) for k, v in element.attrib.items()}\n    # Ajoute les enfants récursivement\n    children = [xml_to_dict(child) for child in element]\n    if children:\n        node[\"children\"] = children",
         "detail": "src.converter",
         "documentation": {}
     },
