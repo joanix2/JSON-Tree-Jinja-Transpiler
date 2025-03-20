@@ -1,5 +1,0 @@
-model {{name}} {
-{% for child in children -%}
-    {{ child.prisma | indent(4, true) }}
-{% endfor -%}
-}

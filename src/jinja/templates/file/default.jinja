@@ -1,8 +1,0 @@
-- name: {{ name }}
-  type: file
-  {% if children %}
-  content: |
-  {% for child in children %}
-{{ child.default | indent(4, true) }}
-  {%- endfor %}
-  {% endif %}

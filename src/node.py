@@ -1,8 +1,13 @@
+import ast
 from typing import List, Optional
-from src.jinja.template_services import get_template, get_templates_names
+from .templates_manager import TemplateManager
 
-class Node:
-    def __init__(self, tag: str, children: Optional[List["Node"]]=None, **args):
+class Node(ast.AST):
+    """
+    Représente un nœud AST avec un `tag`, des `enfants`, et des `arguments` pour la compilation via Jinja.
+    """
+
+    def __init__(self, templates_manager: TemplateManager, tag: str, children: Optional[List["Node"]]=None, **args):
         """
         Initialise un nœud avec un tag, un template, des enfants, et des arguments supplémentaires.
 
@@ -13,7 +18,7 @@ class Node:
         """
         self.tag = tag
         self.children = children or []
-        self.templates_names = get_templates_names(tag)
+        self.templates_manager = templates_manager
 
         # Mapping automatique des arguments supplémentaires
         for key, value in args.items():
@@ -28,12 +33,11 @@ class Node:
         """
 
         # Vérifie si le nœud a un template
-        if not (item in self.templates_names):
+        if not (item in self.templates_manager.get_templates_names(self.tag)):
             raise ValueError(f"Node '{self.tag}' cannot be compiled because it has no template '{item}'.")
 
         # Rendre le template avec le contexte
-        rendered_content = get_template(self.tag, item, self.__dict__)
-        return rendered_content
+        return self.templates_manager.get_template(self.tag, item, self.__dict__)
     
     def __str__(self):
         """

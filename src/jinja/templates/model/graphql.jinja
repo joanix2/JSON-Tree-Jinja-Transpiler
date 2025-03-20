@@ -1,5 +1,0 @@
-type {{name}} {
-{% for child in children -%}
-    {{ child.graphql | indent(4, true) }}
-{% endfor -%}
-}

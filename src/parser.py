@@ -1,6 +1,7 @@
 import os
-import json
-from src.node import Node
+
+from .templates_manager import TemplateManager
+from .node import Node
 
 # Fichier de sortie par défaut
 INFRASTRUCTURE = os.path.join("output","infrastructure.yml")
@@ -8,7 +9,7 @@ INFRASTRUCTURE = os.path.join("output","infrastructure.yml")
 # S'assurer que le répertoire de sortie existe
 os.makedirs(os.path.dirname(INFRASTRUCTURE), exist_ok=True)
 
-def rec_json_parser(json_node):
+def rec_json_parser(templates_manager: TemplateManager,json_node):
     """
     Analyse récursivement un nœud JSON et ses enfants, retournant un objet Node
     qui se rend lui-même et ses enfants.
@@ -20,7 +21,7 @@ def rec_json_parser(json_node):
     tag = json_node.get("tag", "unknown")
 
     # Récupérer les enfants s'ils existent
-    children = [rec_json_parser(child) for child in json_node.get("children", [])]
+    children = [rec_json_parser(templates_manager, child) for child in json_node.get("children", [])]
 
     # Récupérer le contenu textuel s'il existe
     value = json_node.get("value")
@@ -28,9 +29,9 @@ def rec_json_parser(json_node):
     # Récupérer les attributs (tous sauf "tag", "children" et "value")
     attributes = json_node.get("attributes", {})
 
-    return Node(tag=tag, children=children, value=value, **attributes)
+    return Node(templates_manager=templates_manager, tag=tag, children=children, value=value, **attributes)
 
-def parse_json_file(json_tree_root, type, output_file=INFRASTRUCTURE):
+def parse_json_file(templates_path: str, json_tree_root, type, output_file=INFRASTRUCTURE):
     """
     Parse un fichier JSON et consolide tout le contenu rendu dans un seul fichier JSON.
 
@@ -38,9 +39,10 @@ def parse_json_file(json_tree_root, type, output_file=INFRASTRUCTURE):
     :param type: Type de compilation du nœud root.
     :param output_file: Fichier de sortie YAML.
     """
+    templates_manager = TemplateManager(templates_path)
 
     # Démarrer le processus de parsing récursif
-    root_node = rec_json_parser(json_tree_root)
+    root_node = rec_json_parser(templates_manager, json_tree_root)
 
     # Rendre l'arbre entier à partir du nœud racine
     rendered_content = getattr(root_node, type)
