@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Node",
+  "type": "object",
+  "properties": {
+    "tag": {
+      "type": "string",
+      "description": "Type du nœud"
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [{ "type": "string" }, { "type": "number" }, { "type": "integer" }, { "type": "boolean" }, { "type": "array" }, { "type": "object" }, { "type": "null" }]
+      },
+      "description": "Dictionnaire des attributs (clé-valeur)"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "#"
+      },
+      "description": "Liste des sous-nœuds"
+    }
+  },
+  "required": ["tag"]
+}

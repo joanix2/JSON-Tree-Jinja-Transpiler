@@ -1,8 +1,11 @@
 import json
 import os
 import xml.etree.ElementTree as ET
-from .src import xml_to_dict, parse_json_file, build_infrastructure
 
+from .src.build import build_infrastructure
+from .src.converter import xml_to_dict
+from .src.parser import parse_json_file
+from .src.validator import check_tree
 
 def convert_xml_to_json(xml_file, json_file):
     """
@@ -40,6 +43,9 @@ def compile_json(templates_path, input_file, type, output):
     # Charger et parser le fichier JSON
     with open(input_file, "r", encoding="utf-8") as f:
         json_data = json.load(f)
+        
+    if not check_tree(json_data):
+        raise ValueError("❌ Erreur : Le fichier JSON n'est pas un arbre valide.")
 
     # Appelle la fonction pour traiter le fichier JSON
     parse_json_file(templates_path, json_data, type, output)
@@ -79,10 +85,7 @@ def transpile_xml_or_json(templates_path, input_file, type, output):
             json.dump(json_data, f, indent=4, ensure_ascii=False)
 
     # Charger et parser le fichier JSON
-    with open(json_file, "r", encoding="utf-8") as f:
-        json_data = json.load(f)
-
-    parse_json_file(templates_path, json_data, type, output)
+    compile_json(templates_path, json_file, type, output)
 
     # Génération de l'arborescence à partir du YAML
     build_infrastructure(output)
